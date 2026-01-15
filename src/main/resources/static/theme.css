@@ -1,0 +1,151 @@
+/* theme.css - Variabili e Stili Generali */
+
+:root {
+    /* Palette Colori */
+    --primary-color: #D97706; /* Arancione del bottone */
+    --primary-hover: #b45309;
+    --sidebar-bg: #FFF8F0;    /* Crema chiaro sfondo sidebar */
+    --sidebar-hover: #FFEEDD; /* Hover sidebar items */
+    --body-bg: #FFFFFF;       /* Sfondo principale */
+    --text-dark: #1F2937;     /* Titoli */
+    --text-gray: #6B7280;     /* Sottotitoli, descrizioni */
+    --text-light: #9CA3AF;    /* Metadati */
+    --border-color: #E5E7EB;
+    
+    /* Colori Categorie (Badges e Dots) */
+    --color-yellow-bg: #FEF3C7; --color-yellow-text: #D97706;
+    --color-red-bg: #FEE2E2;    --color-red-text: #DC2626;
+    --color-blue-bg: #DBEAFE;   --color-blue-text: #2563EB;
+    --color-green-bg: #D1FAE5;  --color-green-text: #059669;
+    --color-purple-bg: #F3E8FF; --color-purple-text: #7C3AED;
+
+    /* Spaziature e Dimensioni */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    
+    /* Font */
+    --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    color: var(--text-dark);
+    background-color: var(--body-bg);
+}
+
+/* Typography Generica */
+h1, h2, h3 {
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Componente: Bottoni */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Componente: Input Search */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-gray);
+}
+
+/* Componente: Badges Categorie */
+.badge {
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-yellow { background: var(--color-yellow-bg); color: var(--color-yellow-text); }
+.badge-red    { background: var(--color-red-bg); color: var(--color-red-text); }
+.badge-blue   { background: var(--color-blue-bg); color: var(--color-blue-text); }
+.badge-green  { background: var(--color-green-bg); color: var(--color-green-text); }
+.badge-purple { background: var(--color-purple-bg); color: var(--color-purple-text); }
+
+/* Componente: Avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.avatar-sm {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+/* Componente: Dots (per menu laterale)
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+.dot.yellow { background: #FBBF24; }
+.dot.red { background: #F87171; }
+.dot.blue { background: #60A5FA; }
+.dot.green { background: #34D399; }
+.dot.purple { background: #A78BFA; }
+*/

@@ -50,19 +50,21 @@ public class AuthConfiguration {
         .authorizeHttpRequests()
         
         // chiunque (autenticato o no) può accedere alle pagine index, login, register, error ai css e alle immagini
-        .requestMatchers(HttpMethod.GET,"/","/login","/formNewUser","/register","/error","/static/**","/home.css","/error.css","/Log-in.css","/Sign-up.css", "/images/**", "favicon.ico").permitAll()
+        .requestMatchers(HttpMethod.GET,"/","/login","/formNewUser","/register","/error","/static/**", "/images/**", "favicon.ico").permitAll()
         
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
-        .requestMatchers(HttpMethod.POST,"/formNewUser","/register", "/login").permitAll()
+        .requestMatchers(HttpMethod.POST, "/login").permitAll()
         
-        // tutti gli utenti autenticati possono accere alle pagine rimanenti 
-        .anyRequest().authenticated()
+        // tutti gli utenti autenticati possono accere a tutto 
+        .anyRequest().permitAll()
+        
+        
         
         // LOGIN: qui definiamo il login
         .and().formLogin()
         .loginPage("/login")
         .permitAll()
-        .defaultSuccessUrl("/calendar", true) // <--- reindirizzamento sempre a calendar dopo il login (a parte errori)
+        .defaultSuccessUrl("/", true) // <--- reindirizzamento sempre a home dopo il login (a parte errori)
         .failureUrl("/login?error=true")
         
         // LOGOUT: qui definiamo il logout

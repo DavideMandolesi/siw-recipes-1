@@ -21,11 +21,11 @@ public class User {
 	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
-	private String nome;
+	private String firstName;
 	@Column(nullable = false)
-	private String cognome;
+	private String lastName;
 	
-	private Boolean isBanned;
+	private Boolean isBanned = false;
 	
 	/* ==============================
 	 * ==========RELAZIONI===========
@@ -76,31 +76,29 @@ public class User {
 	}
 
 
-	public String getNome() {
-		return nome;
+	public String getFirstName() {
+		return firstName;
 	}
 
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 
-	public String getCognome() {
-		return cognome;
+	public String getLastName() {
+		return lastName;
 	}
 
 
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-
-
+	
 	public Credentials getCredentials() {
 		return credentials;
 	}
-
-
+	
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
 	}	

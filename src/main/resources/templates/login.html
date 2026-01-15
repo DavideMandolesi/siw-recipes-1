@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8" />
+	<title>SiwRecipes - Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Icone -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<!-- CSS Globale (Tema) -->
+		<link rel="stylesheet" th:href="@{/theme.css}">
+</head>
+
+<body>
+	<h1>PAGINA DI LOGIN</h1>
+	<form th:action="@{/login}" method="POST" th:object="${credentials}">
+		<label for="username">Username</label>
+		<input type="text" id="username" name="username" required autocomplete="username" />
+		
+		<label for="password">Password</label>
+		<input type="text" id="password" name="password" required autocomplete="password" />
+		
+		<button type="submit" class="btn submit-btn" th:href="@{/}">Accedi</button>
+		<p>Nuovo utente? <a th:href="@{/formNewUser}">Registrati qui</a></p>
+	</form >
+</body>
