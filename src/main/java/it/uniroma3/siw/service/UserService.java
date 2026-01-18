@@ -3,6 +3,8 @@ package it.uniroma3.siw.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.model.Credentials;
@@ -44,4 +46,42 @@ public class UserService {
 	public boolean existsByEmail(String email) {
 		return userRepository.existsByEmail(email);
 	}
+	
+	/**
+     * Recupera l'entità User corrispondente all'utente attualmente autenticato.
+     * @return l'entità User, o null se nessun utente è autenticato.
+     */
+    @Transactional
+    public User getCurrentUser() {
+        // L'oggetto 'principal' contiene i dettagli dell'utente loggato.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            // Usiamo il repository per recuperare la nostra entità completa dal database.
+            return userRepository.findByCredentialsUsername(username).orElse(null);
+        } else if (principal instanceof String) {
+            // In alcuni casi (es. autenticazione OAuth2), il principal potrebbe essere solo una stringa.
+            String username = (String) principal;
+            return userRepository.findByCredentialsUsername(username).orElse(null);
+        } else {
+            return null;
+        }
+    }
+    
+	public boolean isLogged() {
+	    //se c'è un utente corrente -> l'utente è loggato
+		if(getCurrentUser()!=null) return true;
+		return false;
+	}
+	
+	public boolean isAdmin() {
+		User currentUser =getCurrentUser(); 
+		if(currentUser!=null) {
+			return currentUser.getCredentials().getRole().equals(Credentials.ADMIN_ROLE);
+		}
+		//se l'utente non è loggato sicurametne non è admin
+		return false;
+	}
+	
 }

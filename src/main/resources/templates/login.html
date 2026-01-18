@@ -8,18 +8,104 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 		<!-- CSS Globale (Tema) -->
 		<link rel="stylesheet" th:href="@{/theme.css}">
+		<link rel="stylesheet" th:href="@{/auth.css}">
 </head>
 
-<body>
-	<h1>PAGINA DI LOGIN</h1>
-	<form th:action="@{/login}" method="POST" th:object="${credentials}">
-		<label for="username">Username</label>
-		<input type="text" id="username" name="username" required autocomplete="username" />
-		
-		<label for="password">Password</label>
-		<input type="text" id="password" name="password" required autocomplete="password" />
-		
-		<button type="submit" class="btn submit-btn" th:href="@{/}">Accedi</button>
-		<p>Nuovo utente? <a th:href="@{/formNewUser}">Registrati qui</a></p>
-	</form >
+<div class="auth-container">
+    
+    <!-- SINISTRA: Hero Banner -->
+    <aside class="auth-banner">
+        <div class="auth-brand">
+            <div class="brand-logo"><i class="fa-solid fa-bread-slice"></i></div>
+            <div class="brand-text">
+                <h2>SiwRecipes</h2>
+                <p>La community per condividere le tue ricette.</p>
+            </div>
+        </div>
+
+        <div class="banner-content">
+            <h1>Bentornato Chef.</h1>
+            <p class="banner-description">
+                Accedi al tuo account per gestire le tue ricette e recensire le creazioni degli altri chef.
+            </p>
+            
+            <div class="feature-list">
+				<div class="feature-item">
+					<i class="fa-solid fa-check"></i>
+					<span>Condividi le tue ricette con il mondo</span>
+				</div>
+				<div class="feature-item">
+					<i class="fa-solid fa-check"></i>
+					<span>Valuta e recensisci i piatti degli altri utenti</span>
+				</div>
+				<div class="feature-item">
+					<i class="fa-solid fa-check"></i>
+					<span>Gestisci il tuo profilo e le tue collezioni</span>
+				</div>
+                
+                <!--<div class="feature-item">
+                    <i class="fa-regular fa-heart"></i>
+                    <span>Visualizza i tuoi piatti preferiti</span>
+                </div>-->
+            </div>
+        </div>
+
+        <footer class="banner-footer">
+            &copy; 2025 SiwRecipes Inc. Tutti i diritti riservati.
+        </footer>
+    </aside>
+
+    <!-- DESTRA: Form -->
+    <main class="auth-form-wrapper">
+        
+
+        <div class="auth-content">
+			<a th:href="@{/}" class="back-link">
+            	<i class="fa-solid fa-arrow-left"></i> Torna alla home
+        	</a>
+            <div class="form-header">
+                <h2>Accedi al tuo account</h2>
+                <p>Inserisci le tue credenziali per entrare.</p>
+            </div>
+
+            <!-- Box messaggio errore -->
+            <div class="alert-error"th:if="${param.error}">
+                <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+                <div class="alert-content">
+                    <h4>Errore di autenticazione</h4>
+                    <p>Username o password non validi. Riprova</p>
+                </div>
+            </div>
+
+            <form action="#" th:action="@{/login}" method="POST">
+                <div class="form-group">
+                    <label class="label">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-regular fa-user input-icon"></i>
+                        <input type="text" class="auth-input" placeholder="Il tuo username" name="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label">
+                        Password 
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" class="auth-input" placeholder="••••••••" name="password">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Accedi</button>
+            </form>
+
+            <div class="auth-footer">
+                Non hai ancora un account? <a th:href="@{/formNewUser}" class="auth-link">Registrati ora</a>
+            </div>
+        </div>
+    </main>
+
+</div>
+
 </body>
+</html>

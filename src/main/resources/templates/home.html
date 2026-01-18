@@ -14,10 +14,6 @@
 
 
 <body>
-	<div>
-		<a href="/formNewUser">Registrati</a>
-		<a href="/login">Accedi</a>
-	</div>
 	<div class="app-container">
 	        
 	        <!-- SIDEBAR -->
@@ -40,19 +36,8 @@
 	                    </ul>
 	                </div>
 
-	                <!--<div class="menu-section">
-	                    <span class="menu-label">CATEGORIE</span>
-	                    <ul>
-	                        <li><a href="#"><span class="dot yellow"></span> Primi Piatti</a></li>
-	                        <li><a href="#"><span class="dot red"></span> Secondi di Carne</a></li>
-	                        <li><a href="#"><span class="dot blue"></span> Pesce</a></li>
-	                        <li><a href="#"><span class="dot green"></span> Vegetariano</a></li>
-	                        <li><a href="#"><span class="dot purple"></span> Dolci</a></li>
-	                    </ul>
-	                </div>-->
-
 					<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
-	                <div class="menu-section">
+	                <div class="menu-section" th:if="${isAdmin}">
 	                    <span class="menu-label">AMMINISTRAZIONE</span>
 	                    <ul>
 	                        <li><a href="#"><i class="fa-solid fa-shield-halved"></i> Moderazione</a></li>
@@ -62,12 +47,14 @@
 	            </nav>
 
 	            <div class="user-profile">
-	                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar">
-	                <div class="user-info">
-	                    <span class="user-name">Nome Cognome</span>
-	                    <span class="user-role">Ruolo</span>
+	                <a href="/profile"><img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar"></a>
+					<div class="user-info">
+	                    <a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
+	                    <a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
+						<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
 	                </div>
-	                <button class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+					
+	                <a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
 	            </div>
 	        </aside>
 
@@ -80,9 +67,13 @@
 	                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
 	                    <input type="text" placeholder="Cerca deliziose ricette per fare la figura dello chef..." class="search-input">
 	                </div>
+					<div class="button-container">
+						<button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button>
+						
+						<a href="/login" th:unless="${isLogged}"><button class="btn btn-second">Accedi</button></a>
+						<a href="/formNewUser" th:unless="${isLogged}"><button class="btn btn-second">Registrati</button></a>
+					</div>
 					
-					<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
-	                <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button>
 	            </header>
 
 	            <!-- HERO / FILTERS -->

@@ -60,4 +60,12 @@ public class UserController {
 		
 		return "home";
 	}
+	
+	
+	@GetMapping("/profile")
+	public String profile(Model model) {
+		model.addAttribute("isLogged",userService.isLogged());
+		model.addAttribute("isAdmin",userService.isAdmin());
+		return "profile";
+	}
 }

@@ -8,36 +8,128 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 		<!-- CSS Globale (Tema) -->
 		<link rel="stylesheet" th:href="@{/theme.css}">
+		<link rel="stylesheet" th:href="@{/auth.css}">
 </head>
 
 <body>
-	<h1>PAGINA DI REGISTRAZIONE</h1>
-	
-	<div th:if="${errorMessage}" style="color: red;">
-			    <p th:text="${errorMessage}"></p>
+	<div class="auth-container">
+	    
+	    <!-- SINISTRA: Hero Banner -->
+	    <aside class="auth-banner">
+	        <div class="auth-brand">
+	            <div class="brand-logo"><i class="fa-solid fa-bread-slice"></i></div>
+	            <div class="brand-text">
+	                <h2>SiwRecipes</h2>
+	                <p>La community per condividere le tue ricette.</p>
+	            </div>
+	        </div>
+
+	        <div class="banner-content">
+	            <h1>Unisciti alla nostra community di appassionati.</h1>
+	            <p class="banner-description">
+	                Crea il tuo account per pubblicare le tue ricette, scoprire modi tutti nuovi di cucinare i tuoi piatti preferiti e recensire le creazioni degli altri chef.
+	            </p>
+	            
+	            <div class="feature-list">
+	                <div class="feature-item">
+	                    <i class="fa-solid fa-check"></i>
+	                    <span>Condividi le tue ricette con il mondo</span>
+	                </div>
+	                <div class="feature-item">
+	                    <i class="fa-solid fa-check"></i>
+	                    <span>Valuta e recensisci i piatti degli altri utenti</span>
+	                </div>
+	                <div class="feature-item">
+	                    <i class="fa-solid fa-check"></i>
+	                    <span>Gestisci il tuo profilo e le tue collezioni</span>
+	                </div>
+	            </div>
+	        </div>
+			
+			<footer class="banner-footer">
+				&copy; 2025 SiwRecipes Inc. Tutti i diritti riservati.
+		    </footer>
+	    </aside>
+
+		
+	    <!-- DESTRA: Form -->
+	    <main class="auth-form-wrapper">
+	        
+
+	        <div class="auth-content">
+				<a th:href="@{/}" class="back-link">
+					<i class="fa-solid fa-arrow-left"></i> Torna alla home
+				</a>
+	            <div class="form-header">
+	                <h2>Crea un nuovo account</h2>
+	                <p>Inserisci i tuoi dati per registrarti alla piattaforma.</p>
+	            </div>
+				
+				<!-- Box messaggio errore -->
+				<div class="alert-error"th:if="${errorMessage}">
+					<i class="fa-solid fa-circle-exclamation alert-icon"></i>
+					<div class="alert-content">
+		                <h4>Errore durante la registrazione</h4>
+			 			<p th:text="${errorMessage}"></p>
+			        </div>
+				</div>
+							
+	            <form th:action="@{/register}" method="POST" th:object="${user}">
+	                
+	                <div class="form-row">
+	                    <div class="form-group">
+	                        <label class="label">Nome</label>
+	                        <input type="text" class="auth-input no-icon" placeholder="Nome" required th:field="*{firstName}">
+	                    </div>
+	                    <div class="form-group">
+	                        <label class="label">Cognome</label>
+	                        <input type="text" class="auth-input no-icon" placeholder="Cognome" required th:field="*{lastName}">
+	                    </div>
+	                </div>
+
+	                <div class="form-group">
+	                    <label class="label">Username</label>
+	                    <div class="input-wrapper">
+	                        <i class="fa-regular fa-user input-icon"></i>
+	                        <input type="text" class="auth-input" placeholder="Scegli il tuo username" required th:field="${credentials.username}">
+	                    </div>
+	                </div>
+
+	                <div class="form-group">
+	                    <label class="label">Email</label>
+	                    <div class="input-wrapper">
+	                        <i class="fa-regular fa-envelope input-icon"></i>
+	                        <input type="email" class="auth-input" placeholder="nome@esempio.it" required th:field="*{email}">
+	                    </div>
+	                </div>
+
+	                <div class="form-group">
+	                    <label class="label">Password</label>
+	                    <div class="input-wrapper">
+	                        <i class="fa-solid fa-lock input-icon"></i>
+	                        <input type="password" class="auth-input" placeholder="Inserisci una password" required th:field="${credentials.password}">
+	                    </div>
+	                </div>
+					<div class="form-group">
+						<label class="label">Conferma Password</label>
+						<div class="input-wrapper">
+							<i class="fa-solid fa-lock input-icon"></i>
+							<input type="password" class="auth-input" required name="confirmPassword" placeholder="Conferma la tua password">
+						</div>
+						<span style="font-size: 0.8rem; color: var(--text-light); margin-top: 4px; display:block;">"Conferma Password" e "Password" devono corrispondere.</span>
+					</div>
+
+	                <button type="submit" class="btn btn-primary btn-full">Crea Account</button>
+	            </form>
+
+	            <div class="auth-footer">
+	                Hai già un account? <a th:href="@{/login}" class="auth-link">Accedi qui</a>
+	            </div>
+	        </div>
+	    </main>
+
 	</div>
 
-	<form th:action="@{/register}" method="POST" th:object="${user}">
-		
-		<label for="email">Email</label>
-		<input type="email" id="email" name="email" required th:field="*{email}" autocomplete="Email" />
-		
-		<label for="nome">Nome</label>
-		<input type="text" name="firstName" required th:field="*{firstName}" autocomplete="Nome" />
-					
-		<label for="cognome">Cognome</label>
-		<input type="text" name="lastName" required th:field="*{lastName}" autocomplete="Cognome" />
-					
-		<label for="username">Username</label>
-		<input type="text" id="username" name="username" required th:field="${credentials.username}" autocomplete="Username" />
-		
-		<label for="password">Password</label>
-		<input type="password" id="password" name="password" required th:field="${credentials.password}" autocomplete="Password" />
-		
-		<label for="confirm-password">Confirm Password</label>
-		<input type="password" name="confirmPassword" required autocomplete="Confirm password" />
-		
-		<button type="submit" class="btn submit-btn">Registrati</button>
-		<p>Hai già un account? <a th:href="@{/login}">Accedi qui</a></p>
-	</form >
 </body>
+
+</html>
