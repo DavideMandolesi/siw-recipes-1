@@ -148,17 +148,134 @@ ul {
     border-radius: 50%;
     object-fit: cover;
 }
-/* Componente: Dots (per menu laterale)
-.dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 8px;
+
+/* --- SIDEBAR --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    flex-shrink: 0;
 }
-.dot.yellow { background: #FBBF24; }
-.dot.red { background: #F87171; }
-.dot.blue { background: #60A5FA; }
-.dot.green { background: #34D399; }
-.dot.purple { background: #A78BFA; }
-*/
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    color: #92400E; /* Marrone scuro per il logo */
+}
+
+.logo-icon {
+    background-color: var(--primary-color);
+    color: white;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.brand h1 {
+    font-size: 1.25rem;
+    color: #92400E;
+}
+
+.menu-section {
+    margin-bottom: 30px;
+}
+
+.menu-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-menu ul li {
+    margin-bottom: 4px;
+}
+
+.sidebar-menu ul li a {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    color: #555;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    gap: 12px;
+}
+
+.sidebar-menu ul li a:hover {
+    background-color: var(--sidebar-hover);
+    color: var(--text-dark);
+}
+
+.sidebar-menu ul li.active a {
+    background-color: #FFE4C4; /* Highlight attivo */
+    color: #92400E;
+    font-weight: 600;
+}
+
+.user-profile {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+.user-avatar-sb{
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	object-fit: contain;
+	object-position: center;
+}
+
+.user-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #92400E;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+/* --- MAIN CONTENT --- */
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 30px 40px;
+    background-color: white;
+}

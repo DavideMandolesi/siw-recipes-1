@@ -47,15 +47,15 @@
 	            </nav>
 
 	            <!--<div class="user-profile">
-	                <a href="/profile"><img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar"></a>
+					<a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"class="user-avatar-sb"></a>
 					<div class="user-info">
 	                    <a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
-	                    <a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
+						<a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
 						<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
-	                </div>
-					
-	                <a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-	            </div>-->
+					</div>
+									
+					<a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+				</div>-->
 	        </aside>
 
 	        <!-- MAIN CONTENT -->

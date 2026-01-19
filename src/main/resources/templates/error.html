@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8" />
+	<title>SiwRecipes -Error</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- Icone -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- CSS Globale (Tema) -->
+	<link rel="stylesheet" th:href="@{/theme.css}">
+</head>
+
+
+<body>
+	<div class="app-container">
+		<h2 th:text="${error}">Errore generico</h2>
+		
+		<span>Path:</span> 
+		<span th:text="${path}">/percorso/richiesto</span>
+		
+		<span class="tech-label">Message:</span> 
+		<span th:text="${message}">No message available</span>
+		
+		<span class="tech-label">Timestamp:</span> 
+		<span th:text="${timestamp}">Date</span>
+		
+		<a href="/" th:href="@{/}" class="btn btn-primary btn-home">
+			<i class="fa-solid fa-house"></i> Torna alla Home
+		</a>
+	</div>
+</body>
+</html>

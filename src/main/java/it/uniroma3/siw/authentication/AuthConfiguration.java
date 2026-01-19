@@ -51,13 +51,13 @@ public class AuthConfiguration {
         
         // chiunque (autenticato o no) può accedere alle pagine index, login, register, error ai css e alle immagini
         .requestMatchers(HttpMethod.GET,"/","/login","/formNewUser","/register","/error","/static/**", "/images/**", "favicon.ico").permitAll()
-        .requestMatchers(HttpMethod.GET,"/profile").authenticated()
+        .requestMatchers(HttpMethod.GET,"/profile","/formNewRecipe").authenticated()
         
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
         .requestMatchers(HttpMethod.POST, "/login","/register").permitAll()
         
         // tutti gli utenti autenticati possono accere a tutto 
-        .anyRequest().permitAll()       
+        .anyRequest().permitAll()
         
         
         // LOGIN: qui definiamo il login

@@ -47,7 +47,7 @@
 	            </nav>
 
 	            <div class="user-profile">
-	                <a href="/profile"><img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar"></a>
+	                <a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"class="user-avatar-sb"></a>
 					<div class="user-info">
 	                    <a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
 	                    <a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
@@ -68,7 +68,7 @@
 	                    <input type="text" placeholder="Cerca deliziose ricette per fare la figura dello chef..." class="search-input">
 	                </div>
 					<div class="button-container">
-						<button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button>
+						<a href="/formNewRecipe"><button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button></a>
 						
 						<a href="/login" th:unless="${isLogged}"><button class="btn btn-second">Accedi</button></a>
 						<a href="/formNewUser" th:unless="${isLogged}"><button class="btn btn-second">Registrati</button></a>

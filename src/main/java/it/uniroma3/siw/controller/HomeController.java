@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.UserService;
 
 @Controller
@@ -16,6 +17,12 @@ class HomeController {
 		model.addAttribute("isLogged",userService.isLogged());
 		model.addAttribute("isAdmin",userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
+		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 		return "home";
+	}
+	
+	@GetMapping("/error")
+	public String error(){
+		return "error";
 	}
 }

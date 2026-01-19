@@ -35,6 +35,7 @@ public class UserService {
 		credentialsService.save(credentials);
 		
 		user.setCredentials(credentials);
+		user.setUrlImage(User.DEFAULT_URL_PROFILE_PIC);
 		user.setIsBanned(false);
 		save(user);
 	}

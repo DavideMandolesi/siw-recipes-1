@@ -15,6 +15,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="users")
 public class User {
+	
+	public static final String DEFAULT_URL_PROFILE_PIC = "https://icons.iconarchive.com/icons/fa-team/fontawesome/256/FontAwesome-Circle-User-icon.png";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -24,6 +27,8 @@ public class User {
 	private String firstName;
 	@Column(nullable = false)
 	private String lastName;
+	
+	private String urlImage;
 	
 	private Boolean isBanned = false;
 	
@@ -93,6 +98,16 @@ public class User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getUrlImage() {
+		if(this.urlImage!=null && !this.urlImage.isBlank())
+			return this.urlImage;
+		else return this.DEFAULT_URL_PROFILE_PIC;
+	}
+	
+	public void setUrlImage(String urlImage) {
+		this.urlImage=urlImage;
 	}
 	
 	public Credentials getCredentials() {
