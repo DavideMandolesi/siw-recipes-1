@@ -8,25 +8,61 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<!-- CSS Globale (Tema) -->
 	<link rel="stylesheet" th:href="@{/theme.css}">
+	<link rel="stylesheet" href="error.css" th:href="@{/error.css}">
 </head>
 
 
 <body>
-	<div class="app-container">
-		<h2 th:text="${error}">Errore generico</h2>
-		
-		<span>Path:</span> 
-		<span th:text="${path}">/percorso/richiesto</span>
-		
-		<span class="tech-label">Message:</span> 
-		<span th:text="${message}">No message available</span>
-		
-		<span class="tech-label">Timestamp:</span> 
-		<span th:text="${timestamp}">Date</span>
-		
-		<a href="/" th:href="@{/}" class="btn btn-primary btn-home">
-			<i class="fa-solid fa-house"></i> Torna alla Home
-		</a>
-	</div>
+	<div class="error-wrapper">
+	        
+	        <!-- Icona -->
+	        <div class="error-icon-box">
+	            <i class="fa-solid fa-triangle-exclamation"></i>
+	        </div>
+
+	        <!-- Codice Errore (Es. 500, 404) -->
+	        <h1 class="error-code" th:text="${status}"></h1>
+
+	        <h2 class="error-title">Qualcosa è andato storto</h2>
+	        <p class="error-desc">
+	            Non siamo riusciti a elaborare la tua richiesta a causa di un errore imprevisto. 
+	            Il nostro team tecnico è stato notificato.
+	        </p>
+
+	        <!-- Box Tecnico (Visibile solo se ci sono dettagli) -->
+	        <div class="technical-details">
+	            <div class="details-header">
+	                <i class="fa-solid fa-terminal"></i> Dettagli Errore
+	            </div>
+	            <div class="details-body">
+	                <!-- Mostra i dati reali forniti da Spring Boot -->
+	                <div class="log-line">
+	                    <span class="log-label">Error:</span>
+	                    <span th:text="${error}">Internal Server Error</span>
+	                </div>
+	                
+	                <div class="log-line">
+	                    <span class="log-label">Message:</span>
+	                    <span th:text="${message}">No message available</span>
+	                </div>
+	                
+	                <div class="log-line">
+	                    <span class="log-label">Path:</span>
+	                    <span th:text="${path}">/unknown-path</span>
+	                </div>
+
+	                <div class="log-line">
+	                    <span class="log-label">Timestamp:</span>
+	                    <span th:text="${timestamp}">No timestamp available</span>
+	                </div>
+	            </div>
+	        </div>
+
+	        <!-- Bottone Action -->
+	        <a href="/" th:href="@{/}" class="btn btn-primary">
+	            <i class="fa-solid fa-house"></i> Torna alla Home
+	        </a>
+
+	    </div>
 </body>
 </html>

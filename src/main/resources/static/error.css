@@ -1,0 +1,95 @@
+/* error.css - Stile pagina di errore */
+
+.error-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    background-color: #FAFAFA; /* Sfondo leggermente diverso dal bianco puro */
+}
+
+/* Icona Errore */
+.error-icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-red-bg);
+    color: var(--color-red-text);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.1);
+}
+
+/* Tipografia */
+.error-code {
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    letter-spacing: -2px;
+}
+
+.error-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.error-desc {
+    font-size: 1rem;
+    color: var(--text-gray);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+/* Box Dettagli Tecnici */
+.technical-details {
+    width: 100%;
+    max-width: 600px;
+    background-color: #F3F4F6; /* Grigio chiaro tecnico */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: left;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.details-header {
+    padding: 12px 20px;
+    background-color: #E5E7EB;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.details-body {
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: #4B5563;
+    overflow-x: auto;
+}
+
+.log-line {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.log-label {
+    color: #6B7280;
+    margin-right: 8px;
+    user-select: none;
+}
