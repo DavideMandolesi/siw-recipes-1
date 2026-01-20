@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiwRecipe - Aggiungi Ingrediente</title>
+    
+    <!-- Icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Globale -->
+    <link rel="stylesheet" th:href="@{/theme.css}">
+    <link rel="stylesheet" th:href="@{/recipe.css}"> 
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR -->
+	        <aside class="sidebar">
+	            <div class="brand">
+	                <div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+	                <h1>SiwRecipes</h1>
+	            </div>
+
+	            <nav class="sidebar-menu">
+	                <div class="menu-section">
+	                    <span class="menu-label">MENU PRINCIPALE</span>
+	                    <ul>
+	                        <li class="active"><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
+							
+							<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
+	                        <li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+	                        <!--<li><a href="#"><i class="fa-regular fa-heart"></i> Preferiti</a></li>-->
+	                        <li><a href="#"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+	                    </ul>
+	                </div>
+
+					<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
+	                <div class="menu-section" th:if="${isAdmin}">
+	                    <span class="menu-label">AMMINISTRAZIONE</span>
+	                    <ul>
+	                        <li><a href="#"><i class="fa-solid fa-shield-halved"></i> Moderazione</a></li>
+	                        <li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+	                    </ul>
+	                </div>
+	            </nav>
+
+	            <div class="user-profile">
+	                <a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"class="user-avatar-sb"></a>
+					<div class="user-info">
+	                    <a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
+	                    <a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
+						<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+	                </div>
+					
+	                <a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+	            </div>
+	        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            
+            <form th:action="@{/confirmNewIngredient}" method="POST" th:object="${recipe}">
+				<!--<input type="hidden" name="recipeId" th:value="${recipe.id}" />-->
+				<input type="hidden" name="ingIndex" th:value="${ingIndex}" />
+				<input type="hidden" th:field="*{id}" />
+                
+                <!-- HEADER: Titolo e Bottoni Azione -->
+                <header class="editor-top-bar">
+                    <h2 class="editor-title">Crea Nuova Ricetta</h2>
+					<p class="editor-subtitle">Inserisci gli ingredienti e le rispettive dosi per la tua ricetta, così che tutti possano replicarla!</p>
+                </header>
+
+                <!-- ALERT ERRORI (Visibile solo se ci sono errori) 
+                <div class="alert-box" th:if="${#fields.hasErrors()}">
+                    <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+                    <div class="alert-content">
+                        <h4>Si sono verificati degli errori</h4>
+                        <ul>
+                            <li th:each="err : ${#fields.errors()}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>-->
+
+                <!-- CARD BIANCA EDITOR -->
+                <div class="editor-card">
+                    
+                    <!-- Titolo -->
+					<h3 th:text="${recipe.title}">La tua deliziosa ricetta</h3>
+
+                    <div class="ingredients-section">
+                        <div class="ingredients-header">
+                            <h3>Inserire Ingrediente</h3>
+                            <button type="button" class="btn-add-ingredient">
+                                <i class="fa-solid fa-circle-plus"></i> Aggiungi ingrediente
+                            </button>
+                        </div>
+						
+
+                        <div class="ingredient-row">
+                            <div class="col-name">
+                                <input type="text" class="form-control" placeholder="Nome ingrediente (es. Farina)" required th:field="*{ingredients[__${ingIndex}__].name}">
+                            </div>
+                            <div class="col-qty">
+                                <input type="number" class="form-control" placeholder="Q.tà" required th:field="*{ingredients[__${ingIndex}__].quantity}">
+                            </div>
+                            <div class="col-unit">
+                                <select class="form-control" required th:field="*{ingredients[__${ingIndex}__].unit}">
+                                    <option value="Grammi (g)">Grammi (g)</option>
+                                    <option value="Millilitri (ml)">Millilitri (ml)</option>
+                                    <option value="Pezzi">Pezzi</option>
+                                    <option value="Cucchiai">Cucchiai</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+						
+						<div class="ingredients-section" >
+							<label class="form-label")>Ingredienti Inseriti fin ora</label>
+							<div class="ingredient-row">
+								<ul>
+									<li th:each="ing : ${recipe.ingredients}"th:if="${ing.name != null && !ing.name.isEmpty()}">
+										<span th:text="${ing.name}">Nome</span>
+										<span th:text="${ing.quantity}">Quantity</span>
+										<span th:text="${ing.unit}">Unit</span>
+									</li>
+								</ul>
+								
+							</div>
+						</div>
+
+
+                    </div>
+					
+					
+					
+					
+
+					
+					<footer class="editor-footer">
+						<div class="editor-actions">
+							<a th:href="@{/}" class="link-cancel">Annulla</a>
+							<button type="submit" class="btn btn-primary">
+								<i class="fa-regular fa-floppy-disk"></i> Pubblica Ricetta
+							</button>
+						</div>
+					</footer>
+
+                </div>
+            </form>
+
+        </main>
+    </div>
+
+</body>
+</html>

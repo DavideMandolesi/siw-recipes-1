@@ -279,3 +279,8 @@ ul {
     padding: 30px 40px;
     background-color: white;
 }
+
+.non-clickable{
+	pointer-events:none;
+	cursor: default;
+}

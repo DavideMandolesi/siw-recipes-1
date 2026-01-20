@@ -66,12 +66,7 @@
                 <!-- HEADER: Titolo e Bottoni Azione -->
                 <header class="editor-top-bar">
                     <h2 class="editor-title">Crea Nuova Ricetta</h2>
-                    <div class="editor-actions">
-                        <a th:href="@{/}" class="link-cancel">Annulla</a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-regular fa-floppy-disk"></i> Pubblica Ricetta
-                        </button>
-                    </div>
+					<p class="editor-subtitle">Condividi le tue ricette più sfiziose con una community di appassionati!</p>
                 </header>
 
                 <!-- ALERT ERRORI (Visibile solo se ci sono errori) -->
@@ -139,7 +134,7 @@
                         <label class="form-label">URL Immagine Copertina</label>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="https://..." th:field="${recipe.urlImage}">
-                            <div class="btn-icon-square">
+                            <div class="btn-icon-square non-clickable">
                                 <i class="fa-regular fa-image"></i>
                             </div>
                         </div>
@@ -182,6 +177,15 @@
                         <label class="form-label">Procedimento</label>
                         <textarea class="form-control" rows="8" placeholder="Descrivi passo dopo passo come preparare la ricetta..." required th:field="${recipe.instructions}"></textarea>
                     </div>
+					
+					<footer class="editor-footer">
+						<div class="editor-actions">
+							<a th:href="@{/}" class="link-cancel">Annulla</a>
+							<button type="submit" class="btn btn-primary">
+								<i class="fa-regular fa-floppy-disk"></i> Aggiungi Ingredienti
+							</button>
+						</div>
+					</footer>
 
                 </div>
             </form>

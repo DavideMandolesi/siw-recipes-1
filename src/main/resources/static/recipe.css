@@ -3,14 +3,18 @@
 /* Top Bar specifica per l'editor (diversa dalla Home) */
 .editor-top-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+	flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .editor-title {
     font-size: 1.5rem;
     color: var(--text-dark);
+}
+.editor-subtitle{
+	margin-top:5px;
+	font-size: 1rem;
+	color:var(--text-gray);
 }
 
 .editor-actions {
@@ -19,6 +23,10 @@
     gap: 16px;
 }
 
+.editor-footer{
+	display: flex;
+	justify-content: end;
+}
 .link-cancel {
     color: var(--text-gray);
     font-weight: 500;
