@@ -100,13 +100,13 @@
 
                         <div class="ingredient-row">
                             <div class="col-name">
-                                <input type="text" class="form-control" placeholder="Nome ingrediente (es. Farina)" required th:field="*{ingredients[__${ingIndex}__].name}">
+                                <input type="text" class="form-control" placeholder="Nome ingrediente (es. Farina)" th:field="*{ingredients[__${ingIndex}__].name}">
                             </div>
                             <div class="col-qty">
-                                <input type="number" class="form-control" placeholder="Q.tà" required th:field="*{ingredients[__${ingIndex}__].quantity}">
+                                <input type="number" class="form-control" placeholder="Q.tà" th:field="*{ingredients[__${ingIndex}__].quantity}">
                             </div>
                             <div class="col-unit">
-                                <select class="form-control" required th:field="*{ingredients[__${ingIndex}__].unit}">
+                                <select class="form-control" th:field="*{ingredients[__${ingIndex}__].unit}">
                                     <option value="Grammi (g)">Grammi (g)</option>
                                     <option value="Millilitri (ml)">Millilitri (ml)</option>
                                     <option value="Pezzi">Pezzi</option>
@@ -116,7 +116,7 @@
                             
                         </div>
 						
-						<div class="ingredients-section" >
+						<div class="ingredients-section" th:if="${!recipe.ingredients.isEmpty()}">
 							<label class="form-label")>Ingredienti Inseriti fin ora</label>
 							<div class="ingredient-row">
 								<ul>
@@ -129,21 +129,19 @@
 								
 							</div>
 						</div>
-
-
                     </div>
 					
-					
-					
-					
-
 					
 					<footer class="editor-footer">
 						<div class="editor-actions">
 							<a th:href="@{/}" class="link-cancel">Annulla</a>
-							<button type="submit" class="btn btn-primary">
+							<a th:href="@{/confirmRecipe(recipeId=${recipe.id})}" class="btn btn-second">
 								<i class="fa-regular fa-floppy-disk"></i> Pubblica Ricetta
+							</a>
+							<button type="submit" class="btn btn-primary">
+								<i class="fa-regular fa-floppy-disk"></i> Aggiungi Ingrediente
 							</button>
+							
 						</div>
 					</footer>
 

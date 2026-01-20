@@ -81,6 +81,9 @@ public class RecipeController {
 	public String formNewIngredient(@ModelAttribute("recipeId") Long recipeId,
 			//RedirectAttributes redirectAttributes,
 			Model model) {
+		// qui dentro non si può refreshare la pagina altrimenti si perde il riferimento a recipeId (rimane in sessione solo
+		// per un passaggio visto che è passato da FlashAttribute. Quando model prova  ricostruirlo non trova il costruttore Long
+
 		/* -- INFO NECESSARIE PER SIDEBAR -- */
 		model.addAttribute("isLogged",userService.isLogged());
 		model.addAttribute("isAdmin",userService.isAdmin());
@@ -120,27 +123,29 @@ public class RecipeController {
 			RedirectAttributes redirectAttributes,
 			Model model) {
 		
-		/*// Se l'ID non è stato passato (es. accesso diretto all'URL), reindirizza alla creazione
-        if (recipeId == null) {return "redirect:/formNewRecipe";}
-        
-        Optional<Recipe> 
-        //non è stato trovato alcuna ricetta con quell'id
-        if(recipe.isEmpty()) {
-        	return "redirect:/formNewRecipe";	
-        }*/
+		
 		//questo è l'oggetto con tutte le info tranne l'utlimo ingrediente
 		Recipe recipeNelDb = recipeService.findById(recipe.getId()).get();
-		recipeNelDb.getIngredients().add(recipe.getIngredients().get(index));
-        //qui hai l'oggetto recipe caricato correttamente
-        //Recipe r = recipe.get();
-        //non dovrebbe serivre perché facendo redirect /formNewIng già lì ripete il procedimento
-        //model.addAttribute("ingIndex", recipeService.getLastEmptyIngredientIndex(r));
-        
-		//imposta flag temporaneo=true
-		recipeService.save(recipeNelDb);
+		Ingredient nuovoIng = recipe.getIngredients().get(index);
+		if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
+	        recipeNelDb.getIngredients().add(nuovoIng);
+	        recipeService.save(recipeNelDb); // Salva l'aggiunta
+	    }
 		
         redirectAttributes.addFlashAttribute("recipeId", recipeNelDb.getId());
 				
 		return "redirect:/formNewIngredient";
 	}
+	
+	@GetMapping("/confirmRecipe")
+	@Transactional
+	public String confirmRecipe(@RequestParam("recipeId") Long id) { // Più semplice di ModelAttribute
+	    recipeService.findById(id).ifPresent(r -> {
+	        recipeService.setActive(r);
+	        r.setCreationDate(LocalDate.now(ZoneId.of("GMT")));
+	        recipeService.save(r);
+	    });
+	    return "redirect:/";
+	}
+	
 }

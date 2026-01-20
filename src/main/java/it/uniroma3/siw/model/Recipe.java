@@ -35,7 +35,7 @@ public class Recipe {
 	private String difficulty;
 	private LocalDate creationDate;
 	private String urlImage;
-	
+	private Boolean isActive=false;
 	@ElementCollection
 	private List<Ingredient> ingredients=new ArrayList<>();
 	
@@ -137,6 +137,14 @@ public class Recipe {
 		this.reviews = reviews;
 	}
 	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}

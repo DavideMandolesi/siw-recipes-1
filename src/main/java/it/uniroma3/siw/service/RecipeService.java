@@ -33,4 +33,8 @@ public class RecipeService {
 		return 0;
 		
 	}
+	
+	public void setActive(Recipe recipe) {
+		recipe.setIsActive(true);
+	}
 }
