@@ -18,6 +18,9 @@ public class Category {
     
     @Column(unique = true, nullable = false)
     private String name;
+    
+    @Column(nullable = false)
+    private String description;
 
     @OneToMany(mappedBy = "category")
     private List<Recipe> recipes;
@@ -32,6 +35,14 @@ public class Category {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public void setName(String name) {
