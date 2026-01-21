@@ -20,6 +20,7 @@ import it.uniroma3.siw.model.Ingredient;
 import it.uniroma3.siw.model.Recipe;
 import it.uniroma3.siw.model.Review;
 import it.uniroma3.siw.model.User;
+import it.uniroma3.siw.service.CategoryService;
 import it.uniroma3.siw.service.RecipeService;
 import it.uniroma3.siw.service.UserService;
 import jakarta.transaction.Transactional;
@@ -29,6 +30,7 @@ import jakarta.validation.Valid;
 public class RecipeController {
 	@Autowired UserService userService;
 	@Autowired RecipeService recipeService;
+	@Autowired CategoryService categoryService;
 	
 	@GetMapping("/recipe")
 	public String getRecipe() {
@@ -48,6 +50,8 @@ public class RecipeController {
 		model.addAttribute("isAdmin",userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
 		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		
+		model.addAttribute("categoryList", categoryService.getAllCategories());
 		
 		if(recipe!=null) {
 			model.addAttribute(recipe);
