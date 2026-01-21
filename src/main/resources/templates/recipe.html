@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lasagna Classica alla Bolognese - GustoWeb</title>
+    <!-- Icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" th:href="@{/theme.css}" href="theme.css">
+    
+    <!-- CSS Specifici per questa pagina -->
+    <link rel="stylesheet" th:href="@{/recipe.css}" href="recipe.css">
+    <link rel="stylesheet" th:href="@{/review.css}" href="review.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR (Codice esistente) -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+                <h1>GustoWeb</h1>
+            </div>
+            <nav class="sidebar-menu">
+                <div class="menu-section">
+                    <span class="menu-label">MENU PRINCIPALE</span>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
+                        <li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="user-profile">
+                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar">
+                <div class="user-info">
+                    <span class="user-name">Marco Rossi</span>
+                    <span class="user-role">Admin</span>
+                </div>
+                <button class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <!-- Override padding 0 per far estendere l'immagine hero -->
+        <main class="main-content" style="padding: 0;">
+            
+            <!-- HERO SECTION -->
+            <div class="recipe-hero">
+                <div class="hero-overlay">
+                    <div class="hero-badges">
+                        <span class="hero-badge badge-primary">Primi Piatti</span>
+                        
+                        <div class="hero-badge badge-dark">
+                            <span class="badge-label">Difficoltà</span>
+                            <span>Media</span>
+                        </div>
+                        
+                        <div class="hero-badge badge-dark">
+                            <span class="badge-label">Tempo</span>
+                            <span>90 Minuti</span>
+                        </div>
+                    </div>
+                    <h1 class="hero-title">Lasagna Classica alla Bolognese</h1>
+                </div>
+            </div>
+
+            <!-- CONTENT GRID -->
+            <div class="recipe-container">
+                
+                <!-- COLONNA SINISTRA (Contenuto) -->
+                <div class="recipe-main">
+                    
+                    <h2 class="section-title">Descrizione</h2>
+                    <div class="recipe-description">
+                        <p>
+                            Un grande classico della cucina italiana, con strati di pasta fresca, ragù lento e besciamella cremosa gratinati al forno. Perfetta per i pranzi della domenica e le occasioni speciali in famiglia.
+                        </p>
+                        <p>
+                            Per preparare la lasagna inizia dal ragù, soffriggendo dolcemente sedano, carota e cipolla e aggiungendo la carne macinata da rosolare bene prima di sfumare con il vino e unire la passata di pomodoro. Lascia cuocere a fuoco basso fino a ottenere un sugo denso e profumato, quindi prepara la besciamella sciogliendo il burro, incorporando la farina e versando il latte caldo poco alla volta, insaporendo con sale e noce moscata. A questo punto componi la lasagna alternando in teglia strati di pasta, ragù, besciamella e parmigiano grattugiato, terminando con uno strato generoso di salsa e formaggio, e cuoci in forno caldo finché la superficie sarà dorata e leggermente croccante.
+                        </p>
+                    </div>
+
+                    <!-- REVIEWS SECTION -->
+                    <div class="reviews-section">
+                        <div class="reviews-header">
+                            <h2 class="section-title" style="margin:0;">Recensioni (3)</h2>
+                            <button class="btn btn-outline">Scrivi recensione</button>
+                        </div>
+
+                        <!-- Review 1 -->
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <img src="https://i.pravatar.cc/150?img=11" class="avatar">
+                                    <div>
+                                        <span class="reviewer-name">Marco Rossi</span>
+                                        <span class="review-date">14 Ottobre 2023</span>
+                                    </div>
+                                </div>
+                                <div class="review-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-regular fa-star"></i> <!-- 4/5 stars -->
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                Ottima ricetta, il ragù è venuto perfetto seguendo i passaggi. Forse un po' troppo lunga la cottura indicata, nel mio forno sono bastati 30 minuti.
+                            </div>
+                            <div class="review-actions">
+                                <button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i> Modifica</button>
+                                <button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i> Elimina</button>
+                            </div>
+                        </div>
+
+                        <!-- Review 2 -->
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <img src="https://i.pravatar.cc/150?img=32" class="avatar">
+                                    <div>
+                                        <span class="reviewer-name">Giulia Bianchi</span>
+                                        <span class="review-date">10 Settembre 2023</span>
+                                    </div>
+                                </div>
+                                <div class="review-stars">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i> <!-- 5/5 stars -->
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                Semplicemente deliziosa! Ho aggiunto un po' di mozzarella tra gli strati per renderla più filante. Consigliatissima.
+                            </div>
+                            <!-- Esempio: Utente diverso, magari non admin, quindi niente bottoni (o solo se proprietario) -->
+                             <div class="review-actions">
+                                <button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i> Modifica</button>
+                                <button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i> Elimina</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- COLONNA DESTRA (Sidebar Widget) -->
+                <aside class="recipe-sidebar">
+                    
+                    <!-- Bottoni Azione -->
+                    <div class="recipe-actions">
+                        <button class="btn btn-primary" style="flex: 1;">
+                            <i class="fa-solid fa-pen"></i> Modifica Ricetta
+                        </button>
+                        <button class="btn btn-delete-recipe" title="Elimina Ricetta">
+                            <i class="fa-regular fa-trash-can"></i> Elimina
+                        </button>
+                    </div>
+
+                    <!-- Autore -->
+                    <div class="widget-box">
+                        <h4 class="widget-title">Autore</h4>
+                        <div class="author-widget">
+                            <img src="https://i.pravatar.cc/150?img=68" class="author-avatar-lg">
+                            <div class="author-details">
+                                <h4>Alessandro Verdi</h4>
+                                <span class="author-role">Chef Appassionato</span>
+                            </div>
+                        </div>
+                        <div class="publish-date">
+                            <i class="fa-regular fa-calendar"></i> Pubblicata il 12 Settembre 2023
+                        </div>
+                    </div>
+
+                    <!-- Ingredienti -->
+                    <div class="widget-box">
+                        <h4 class="widget-title">Ingredienti</h4>
+                        <ul class="ingredient-list">
+                            <li class="ingredient-item">
+                                <span>Pasta per lasagne</span>
+                                <span class="ingredient-qty">500g</span>
+                            </li>
+                            <li class="ingredient-item">
+                                <span>Carne macinata</span>
+                                <span class="ingredient-qty">400g</span>
+                            </li>
+                            <li class="ingredient-item">
+                                <span>Passata di pomodoro</span>
+                                <span class="ingredient-qty">700ml</span>
+                            </li>
+                            <li class="ingredient-item">
+                                <span>Besciamella</span>
+                                <span class="ingredient-qty">500ml</span>
+                            </li>
+                            <li class="ingredient-item">
+                                <span>Parmigiano</span>
+                                <span class="ingredient-qty">100g</span>
+                            </li>
+                            <li class="ingredient-item">
+                                <span>Vino Rosso</span>
+                                <span class="ingredient-qty">1/2 bicchiere</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </aside>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

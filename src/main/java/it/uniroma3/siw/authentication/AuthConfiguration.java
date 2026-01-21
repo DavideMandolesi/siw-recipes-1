@@ -1,5 +1,7 @@
 package it.uniroma3.siw.authentication;
 
+import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class AuthConfiguration {
 		.dataSource(datasource)
 		/*la seguente query serve a non generare errore visto che comunque spring security si aspetta una tabella
 		authorities con i giusti ruoli all'interno (noi non li usiamo)*/
-		.authoritiesByUsernameQuery("SELECT username, 'ROLE_USER' FROM credentials WHERE username = ?")
+		.authoritiesByUsernameQuery("SELECT username, role FROM credentials WHERE username = ?")
 		.usersByUsernameQuery("SELECT username,password,1 as enabled FROM credentials WHERE username =?");
 	}
 	@Bean
@@ -55,6 +57,9 @@ public class AuthConfiguration {
         
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
         .requestMatchers(HttpMethod.POST, "/login","/register").permitAll()
+        
+        .requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
+        .requestMatchers(HttpMethod.POST,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
         
         // tutti gli utenti autenticati possono accere a tutto 
         .anyRequest().permitAll()

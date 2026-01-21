@@ -42,7 +42,7 @@
 				<div class="menu-section" th:if="${isAdmin}">
 					<span class="menu-label">AMMINISTRAZIONE</span>
 					<ul>
-						<li><a href="#"><i class="fa-solid fa-shield-halved"></i> Moderazione</a></li>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-shield-halved"></i> Gestisci Categorie</a></li>
 						<li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
 					</ul>
 				</div>

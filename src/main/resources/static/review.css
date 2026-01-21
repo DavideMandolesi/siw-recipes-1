@@ -1,0 +1,104 @@
+/* review.css - Stili per la sezione recensioni */
+
+.reviews-section {
+    margin-top: 60px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 40px;
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-dark);
+}
+.btn-outline:hover {
+    background-color: #F9FAFB;
+    border-color: var(--text-gray);
+}
+
+/* Review Card */
+.review-card {
+    background-color: #FAFAFA; /* Sfondo leggermente grigio come nell'immagine */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reviewer-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    display: block;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+/* Stelle */
+.review-stars {
+    color: #FBBF24; /* Giallo stelle */
+    font-size: 0.9rem;
+}
+
+.review-body {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+/* Azioni Recensione (Modifica/Elimina) */
+.review-actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.review-action-btn {
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.action-edit {
+    color: var(--text-light);
+}
+.action-edit:hover {
+    color: var(--primary-color); /* Arancio hover */
+}
+
+.action-delete {
+    color: var(--text-light);
+}
+.action-delete:hover {
+    color: #DC2626; /* Rosso hover */
+}
