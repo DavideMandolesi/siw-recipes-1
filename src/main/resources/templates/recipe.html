@@ -1,217 +1,198 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lasagna Classica alla Bolognese - GustoWeb</title>
-    <!-- Icone -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS Files -->
-    <link rel="stylesheet" th:href="@{/theme.css}" href="theme.css">
-    
-    <!-- CSS Specifici per questa pagina -->
-    <link rel="stylesheet" th:href="@{/recipe.css}" href="recipe.css">
-    <link rel="stylesheet" th:href="@{/review.css}" href="review.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lasagna Classica alla Bolognese - GustoWeb</title>
+	<!-- Icone -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" th:href="@{/theme.css}" href="theme.css">
+
+	<!-- CSS Specifici per questa pagina -->
+	<link rel="stylesheet" th:href="@{/recipe.css}" href="recipe.css">
+	<link rel="stylesheet" th:href="@{/review.css}" href="review.css">
 </head>
+
 <body>
 
-    <div class="app-container">
-        
-        <!-- SIDEBAR (Codice esistente) -->
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
-                <h1>GustoWeb</h1>
-            </div>
-            <nav class="sidebar-menu">
-                <div class="menu-section">
-                    <span class="menu-label">MENU PRINCIPALE</span>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
-                        <li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="user-profile">
-                <img src="https://i.pravatar.cc/150?img=11" alt="User" class="avatar">
-                <div class="user-info">
-                    <span class="user-name">Marco Rossi</span>
-                    <span class="user-role">Admin</span>
-                </div>
-                <button class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
-            </div>
-        </aside>
+	<div class="app-container">
 
-        <!-- MAIN CONTENT -->
-        <!-- Override padding 0 per far estendere l'immagine hero -->
-        <main class="main-content" style="padding: 0;">
-            
-            <!-- HERO SECTION -->
-            <div class="recipe-hero">
-                <div class="hero-overlay">
-                    <div class="hero-badges">
-                        <span class="hero-badge badge-primary">Primi Piatti</span>
-                        
-                        <div class="hero-badge badge-dark">
-                            <span class="badge-label">Difficoltà</span>
-                            <span>Media</span>
-                        </div>
-                        
-                        <div class="hero-badge badge-dark">
-                            <span class="badge-label">Tempo</span>
-                            <span>90 Minuti</span>
-                        </div>
-                    </div>
-                    <h1 class="hero-title">Lasagna Classica alla Bolognese</h1>
-                </div>
-            </div>
+		<!-- SIDEBAR -->
+		<aside class="sidebar">
+			<div class="brand">
+				<div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+				<h1>SiwRecipes</h1>
+			</div>
 
-            <!-- CONTENT GRID -->
-            <div class="recipe-container">
-                
-                <!-- COLONNA SINISTRA (Contenuto) -->
-                <div class="recipe-main">
-                    
-                    <h2 class="section-title">Descrizione</h2>
-                    <div class="recipe-description">
-                        <p>
-                            Un grande classico della cucina italiana, con strati di pasta fresca, ragù lento e besciamella cremosa gratinati al forno. Perfetta per i pranzi della domenica e le occasioni speciali in famiglia.
-                        </p>
-                        <p>
-                            Per preparare la lasagna inizia dal ragù, soffriggendo dolcemente sedano, carota e cipolla e aggiungendo la carne macinata da rosolare bene prima di sfumare con il vino e unire la passata di pomodoro. Lascia cuocere a fuoco basso fino a ottenere un sugo denso e profumato, quindi prepara la besciamella sciogliendo il burro, incorporando la farina e versando il latte caldo poco alla volta, insaporendo con sale e noce moscata. A questo punto componi la lasagna alternando in teglia strati di pasta, ragù, besciamella e parmigiano grattugiato, terminando con uno strato generoso di salsa e formaggio, e cuoci in forno caldo finché la superficie sarà dorata e leggermente croccante.
-                        </p>
-                    </div>
+			<nav class="sidebar-menu">
+				<div class="menu-section">
+					<span class="menu-label">MENU PRINCIPALE</span>
+					<ul>
+						<li class="active"><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
 
-                    <!-- REVIEWS SECTION -->
-                    <div class="reviews-section">
-                        <div class="reviews-header">
-                            <h2 class="section-title" style="margin:0;">Recensioni (3)</h2>
-                            <button class="btn btn-outline">Scrivi recensione</button>
-                        </div>
+						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
+						<li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<!--<li><a href="#"><i class="fa-regular fa-heart"></i> Preferiti</a></li>-->
+						<li><a href="#"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+					</ul>
+				</div>
 
-                        <!-- Review 1 -->
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="reviewer-info">
-                                    <img src="https://i.pravatar.cc/150?img=11" class="avatar">
-                                    <div>
-                                        <span class="reviewer-name">Marco Rossi</span>
-                                        <span class="review-date">14 Ottobre 2023</span>
-                                    </div>
-                                </div>
-                                <div class="review-stars">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-regular fa-star"></i> <!-- 4/5 stars -->
-                                </div>
-                            </div>
-                            <div class="review-body">
-                                Ottima ricetta, il ragù è venuto perfetto seguendo i passaggi. Forse un po' troppo lunga la cottura indicata, nel mio forno sono bastati 30 minuti.
-                            </div>
-                            <div class="review-actions">
-                                <button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i> Modifica</button>
-                                <button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i> Elimina</button>
-                            </div>
-                        </div>
+				<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
+				<div class="menu-section" th:if="${isAdmin}">
+					<span class="menu-label">AMMINISTRAZIONE</span>
+					<ul>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-shield-halved"></i> Gestisci
+								Categorie</a></li>
+						<li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+					</ul>
+				</div>
+			</nav>
 
-                        <!-- Review 2 -->
-                        <div class="review-card">
-                            <div class="review-header">
-                                <div class="reviewer-info">
-                                    <img src="https://i.pravatar.cc/150?img=32" class="avatar">
-                                    <div>
-                                        <span class="reviewer-name">Giulia Bianchi</span>
-                                        <span class="review-date">10 Settembre 2023</span>
-                                    </div>
-                                </div>
-                                <div class="review-stars">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i> <!-- 5/5 stars -->
-                                </div>
-                            </div>
-                            <div class="review-body">
-                                Semplicemente deliziosa! Ho aggiunto un po' di mozzarella tra gli strati per renderla più filante. Consigliatissima.
-                            </div>
-                            <!-- Esempio: Utente diverso, magari non admin, quindi niente bottoni (o solo se proprietario) -->
-                             <div class="review-actions">
-                                <button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i> Modifica</button>
-                                <button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i> Elimina</button>
-                            </div>
-                        </div>
+			<div class="user-profile">
+				<a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+						class="user-avatar-sb"></a>
+				<div class="user-info">
+					<a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
+					<a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+				</div>
 
-                    </div>
-                </div>
+				<a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+			</div>
+		</aside>
 
-                <!-- COLONNA DESTRA (Sidebar Widget) -->
-                <aside class="recipe-sidebar">
-                    
-                    <!-- Bottoni Azione -->
-                    <div class="recipe-actions">
-                        <button class="btn btn-primary" style="flex: 1;">
-                            <i class="fa-solid fa-pen"></i> Modifica Ricetta
-                        </button>
-                        <button class="btn btn-delete-recipe" title="Elimina Ricetta">
-                            <i class="fa-regular fa-trash-can"></i> Elimina
-                        </button>
-                    </div>
+		<!-- MAIN CONTENT -->
+		<!-- Override padding 0 per far estendere l'immagine hero -->
+		<main class="main-content" style="padding: 0;">
 
-                    <!-- Autore -->
-                    <div class="widget-box">
-                        <h4 class="widget-title">Autore</h4>
-                        <div class="author-widget">
-                            <img src="https://i.pravatar.cc/150?img=68" class="author-avatar-lg">
-                            <div class="author-details">
-                                <h4>Alessandro Verdi</h4>
-                                <span class="author-role">Chef Appassionato</span>
-                            </div>
-                        </div>
-                        <div class="publish-date">
-                            <i class="fa-regular fa-calendar"></i> Pubblicata il 12 Settembre 2023
-                        </div>
-                    </div>
+			<!-- HERO SECTION -->
+			<div class="recipe-hero"
+				th:style="'background-image: url(' + (${recipe.urlImage} ?: ${defaultRecipeUrlImage}) + ');'">
+				<div class="hero-overlay">
+					<div class="hero-badges">
+						<div class="hero-badge badge-primary">
+							<span class="badge-label">Categoria</span>
+							<span th:text="${recipe.category.name}"></span>
+						</div>
 
-                    <!-- Ingredienti -->
-                    <div class="widget-box">
-                        <h4 class="widget-title">Ingredienti</h4>
-                        <ul class="ingredient-list">
-                            <li class="ingredient-item">
-                                <span>Pasta per lasagne</span>
-                                <span class="ingredient-qty">500g</span>
-                            </li>
-                            <li class="ingredient-item">
-                                <span>Carne macinata</span>
-                                <span class="ingredient-qty">400g</span>
-                            </li>
-                            <li class="ingredient-item">
-                                <span>Passata di pomodoro</span>
-                                <span class="ingredient-qty">700ml</span>
-                            </li>
-                            <li class="ingredient-item">
-                                <span>Besciamella</span>
-                                <span class="ingredient-qty">500ml</span>
-                            </li>
-                            <li class="ingredient-item">
-                                <span>Parmigiano</span>
-                                <span class="ingredient-qty">100g</span>
-                            </li>
-                            <li class="ingredient-item">
-                                <span>Vino Rosso</span>
-                                <span class="ingredient-qty">1/2 bicchiere</span>
-                            </li>
-                        </ul>
-                    </div>
+						<div class=" hero-badge badge-dark">
+							<span class="badge-label">Difficoltà</span>
+							<span th:text="${recipe.title}"></span>
+						</div>
 
-                </aside>
-            </div>
+						<div class="hero-badge badge-dark">
+							<span class="badge-label">Tempo</span>
+							<span th:text="${recipe.prepTime} + ' Minuti'"></span>
+						</div>
+					</div>
+					<h1 class="hero-title" th:text="${recipe.title}"></h1>
+				</div>
+			</div>
 
-        </main>
-    </div>
+			<!-- CONTENT GRID -->
+			<div class="recipe-container">
+
+				<!-- COLONNA SINISTRA (Contenuto) -->
+				<div class="recipe-main">
+
+					<h2 class="section-title">Descrizione</h2>
+					<div class="recipe-description">
+						<p th:text="${recipe.shortDescription}"></p>
+					</div>
+
+					<h2 class="section-title">Preparazione</h2>
+					<div class="recipe-description">
+						<p th:text="${recipe.instructions}"></p>
+					</div>
+
+					<!-- REVIEWS SECTION -->
+					<div class="reviews-section">
+						<div class="reviews-header">
+							<h2 class="section-title" style="margin:0;"
+								th:text="'Recensioni (' + ${#lists.size(recipe.reviews)} + ')'">Recensioni (0)</h2>
+							<button class="btn btn-outline">Scrivi recensione</button>
+						</div>
+
+						<div class="review-card" th:each="r : ${recipe.reviews}">
+							<div class="review-header">
+								<div class="reviewer-info">
+									<img th:src="${r.author.urlImage}" class="avatar">
+									<div>
+										<span class="reviewer-name" th:text="{r.author.credentials.username}"></span>
+										<span class="review-date"
+											th:text="${#temporals.format(r.creationDate, 'dd MMMM yyyy')}"></span>
+									</div>
+								</div>
+								<div class="review-stars">
+									<i th:each="num : ${#numbers.sequence(1, 5)}"
+										th:class="${num <= r.rating} ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
+								</div>
+							</div>
+							<div class="review-body" th:text="r.text"></div>
+							<div class="review-actions"
+								th:if="${isAdmin or (currentUser != null and currentUser.id == r.author.id)}">
+								<button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i>
+									Modifica</button>
+								<button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i>
+									Elimina</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- COLONNA DESTRA (Sidebar Widget) -->
+				<aside class="recipe-sidebar">
+
+					<!-- Bottoni Azione -->
+					<div class="recipe-actions"
+						th:if="${isAdmin or (currentUser != null and currentUser.id == recipe.author.id)}">
+						<button class="btn btn-primary" style="flex: 1;">
+							<i class="fa-solid fa-pen"></i> Modifica Ricetta
+						</button>
+						<button class="btn btn-delete-recipe" title="Elimina Ricetta">
+							<i class="fa-regular fa-trash-can"></i> Elimina
+						</button>
+					</div>
+
+					<!-- Autore -->
+					<div class="widget-box">
+						<h4 class="widget-title"></h4>
+						<div class="author-widget">
+							<img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+								class="author-avatar-lg">
+							<div class="author-details">
+								<h4 th:text="${recipe.author.credentials.username}"></h4>
+								<span class="author-role" th:if="${recipe.author.credentials.role == 'ADMIN' }"
+									th:text="${recipe.author.credentials.role}">Chef Appassionato</span>
+							</div>
+						</div>
+						<div class="publish-date">
+							<i class="fa-regular fa-calendar"
+								th:text="${' Pubblicata il ' + #temporals.format(recipe.creationDate, 'dd MMMM yyyy')}"></i>
+						</div>
+					</div>
+
+					<!-- Ingredienti -->
+					<div class="widget-box">
+						<h4 class="widget-title">Ingredienti</h4>
+						<ul class="ingredient-list">
+							<li class="ingredient-item" th:each="i : ${recipe.ingredients}">
+								<span th:text="${i.name}"></span>
+								<span class="ingredient-qty" th:text="${i.quantity +' '+ i.unit}"></span>
+							</li>
+						</ul>
+					</div>
+
+				</aside>
+			</div>
+
+		</main>
+	</div>
 
 </body>
+
 </html>

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,9 +33,22 @@ public class RecipeController {
 	@Autowired RecipeService recipeService;
 	@Autowired CategoryService categoryService;
 	
-	@GetMapping("/recipe")
-	public String getRecipe() {
-		return "recipe";
+	@GetMapping("/recipe/{id}")
+	public String getRecipe(@PathVariable("id") Long id,
+			Model model) {
+		model.addAttribute("isLogged",userService.isLogged());
+		model.addAttribute("isAdmin",userService.isAdmin());
+		model.addAttribute("currentUser", userService.getCurrentUser());
+		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
+		
+		Recipe recipe = recipeService.findRecipeById(id);
+		if(recipe!=null) {
+			model.addAttribute("recipe",recipe);
+			return "recipe";
+		}
+		//aggiungi errore ricetta non presente
+		return "redirect:/home";
 	}
 	
 	@GetMapping("/recipeList")

@@ -37,4 +37,8 @@ public class RecipeService {
 	public void setActive(Recipe recipe) {
 		recipe.setIsActive(true);
 	}
+
+	public Recipe findRecipeById(Long id) {
+		return recipeRepository.findById(id).get();
+	}
 }
