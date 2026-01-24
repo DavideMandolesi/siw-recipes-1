@@ -1,104 +1,292 @@
 /* review.css - Stili per la sezione recensioni */
 
 .reviews-section {
-    margin-top: 60px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 40px;
+	margin-top: 60px;
+	border-top: 1px solid var(--border-color);
+	padding-top: 40px;
 }
 
 .reviews-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 30px;
 }
 
 .btn-outline {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-dark);
+	background: transparent;
+	border: 1px solid var(--border-color);
+	color: var(--text-dark);
 }
+
 .btn-outline:hover {
-    background-color: #F9FAFB;
-    border-color: var(--text-gray);
+	background-color: #F9FAFB;
+	border-color: var(--text-gray);
 }
 
 /* Review Card */
 .review-card {
-    background-color: #FAFAFA; /* Sfondo leggermente grigio come nell'immagine */
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    margin-bottom: 20px;
+	background-color: #FAFAFA;
+	/* Sfondo leggermente grigio come nell'immagine */
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-md);
+	padding: 20px;
+	margin-bottom: 20px;
 }
 
 .review-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 12px;
 }
 
 .reviewer-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 .reviewer-name {
-    font-weight: 600;
-    color: var(--text-dark);
-    display: block;
+	font-weight: 600;
+	color: var(--text-dark);
+	display: block;
 }
 
 .review-date {
-    font-size: 0.8rem;
-    color: var(--text-light);
+	font-size: 0.8rem;
+	color: var(--text-light);
 }
 
 /* Stelle */
 .review-stars {
-    color: #FBBF24; /* Giallo stelle */
-    font-size: 0.9rem;
+	color: #FBBF24;
+	/* Giallo stelle */
+	font-size: 0.9rem;
 }
 
 .review-body {
-    font-size: 0.95rem;
-    color: var(--text-gray);
-    line-height: 1.5;
-    margin-bottom: 16px;
+	font-size: 0.95rem;
+	color: var(--text-gray);
+	line-height: 1.5;
+	margin-bottom: 16px;
 }
 
 /* Azioni Recensione (Modifica/Elimina) */
 .review-actions {
-    display: flex;
-    gap: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+	display: flex;
+	gap: 12px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .review-action-btn {
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
+	font-size: 0.8rem;
+	font-weight: 600;
+	cursor: pointer;
+	background: none;
+	border: none;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	transition: color 0.2s;
 }
 
 .action-edit {
-    color: var(--text-light);
+	color: var(--text-light);
 }
+
 .action-edit:hover {
-    color: var(--primary-color); /* Arancio hover */
+	color: var(--primary-color);
+	/* Arancio hover */
 }
 
 .action-delete {
-    color: var(--text-light);
+	color: var(--text-light);
 }
+
 .action-delete:hover {
-    color: #DC2626; /* Rosso hover */
+	color: #DC2626;
+	/* Rosso hover */
+}
+
+/* --- PER PAGINA CREAZIONE RECENSIONE --- */
+
+/* Breadcrumbs */
+.breadcrumbs {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 0.9rem;
+	color: var(--text-gray);
+	margin-bottom: 30px;
+}
+
+.crumb-icon {
+	font-size: 0.7rem;
+	color: var(--text-light);
+}
+
+.crumb-item.active {
+	color: var(--text-dark);
+	font-weight: 600;
+}
+
+/* Layout Grid per questa pagina */
+.review-page-grid {
+	display: grid;
+	grid-template-columns: 350px 1fr;
+	/* Colonna fissa a sinistra, resto a destra */
+	gap: 30px;
+	align-items: start;
+}
+
+/* Colonna Sinistra: Card Anteprima */
+.recipe-preview-card {
+	background: white;
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	border: 1px solid var(--border-color);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.preview-image {
+	height: 200px;
+	width: 100%;
+}
+
+.preview-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.preview-body {
+	padding: 20px;
+}
+
+.preview-title {
+	font-size: 1.1rem;
+	color: var(--text-dark);
+	margin-bottom: 8px;
+	line-height: 1.3;
+}
+
+.preview-desc {
+	font-size: 0.9rem;
+	color: var(--text-gray);
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.preview-author {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 0.9rem;
+	color: var(--text-dark);
+	font-weight: 500;
+}
+
+/* Colonna Destra: Form Wrapper */
+.review-form-wrapper {
+	background: white;
+	border-radius: var(--radius-lg);
+	/* Più arrotondato come nell'immagine */
+	padding: 40px;
+	border: 1px solid var(--border-color);
+}
+
+.form-header-simple {
+	margin-bottom: 30px;
+}
+
+.form-header-simple h2 {
+	font-size: 1.5rem;
+	margin-bottom: 8px;
+}
+
+.form-header-simple p {
+	color: var(--text-gray);
+	font-size: 0.95rem;
+}
+
+/* --- WIDGET STELLE INTERATTIVO --- */
+.star-rating-widget {
+	display: flex;
+	flex-direction: row-reverse;
+	/* Invertiamo l'ordine visivo per usare il selettore ~ */
+	justify-content: flex-end;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+/* Nascondiamo i radio button veri */
+.star-rating-widget input[type="radio"] {
+	display: none;
+}
+
+/* Stile base della stella vuota */
+.star-rating-widget label {
+	font-size: 1.5rem;
+	color: #E5E7EB;
+	/* Grigio chiaro default */
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+/* 1. Quando passo il mouse su una stella, lei e tutte quelle DOPO (visivamente prima) si colorano */
+.star-rating-widget label:hover,
+.star-rating-widget label:hover~label {
+	color: #FCD34D;
+	/* Giallo chiaro hover */
+}
+
+/* 2. Quando un radio è selezionato, la sua label e tutte quelle successive si colorano */
+.star-rating-widget input[type="radio"]:checked~label {
+	color: #F59E0B;
+	/* Arancione/Oro pieno */
+}
+
+/* Helper text sotto le stelle */
+.helper-text {
+	font-size: 0.85rem;
+	color: var(--text-light);
+}
+
+/* Textarea specifica */
+.review-textarea {
+	width: 100%;
+	display: block;
+	min-height: 150px;
+	resize: vertical;
+	font-family: inherit;
+	padding: 12px;
+	margin-top: 8px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-sm);
+	box-sizing: border-box;
+	background-color: white;
+	font-size: 0.95rem;
+	line-height: 1.5;
+}
+
+.char-counter {
+	text-align: right;
+	font-size: 0.8rem;
+	color: var(--text-light);
+	margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+	.review-page-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.recipe-preview-column {
+		order: -1;
+		/* Su mobile l'anteprima sta sopra o si può nascondere */
+	}
 }

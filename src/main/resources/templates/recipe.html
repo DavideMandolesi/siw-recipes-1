@@ -114,7 +114,8 @@
 						<div class="reviews-header">
 							<h2 class="section-title" style="margin:0;"
 								th:text="'Recensioni (' + ${#lists.size(recipe.reviews)} + ')'">Recensioni (0)</h2>
-							<button class="btn btn-outline">Scrivi recensione</button>
+							<a th:href="@{/formNewReview/{id}(id=${recipe.id})}"><button class="btn btn-outline">Scrivi
+									recensione</button></a>
 						</div>
 
 						<div class="review-card" th:each="r : ${recipe.reviews}">
@@ -122,7 +123,7 @@
 								<div class="reviewer-info">
 									<img th:src="${r.author.urlImage}" class="avatar">
 									<div>
-										<span class="reviewer-name" th:text="{r.author.credentials.username}"></span>
+										<span class="reviewer-name" th:text="${r.author.credentials.username}"></span>
 										<span class="review-date"
 											th:text="${#temporals.format(r.creationDate, 'dd MMMM yyyy')}"></span>
 									</div>
@@ -132,11 +133,11 @@
 										th:class="${num <= r.rating} ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
 								</div>
 							</div>
-							<div class="review-body" th:text="r.text"></div>
+							<div class="review-body" th:text="${r.text}"></div>
 							<div class="review-actions"
 								th:if="${isAdmin or (currentUser != null and currentUser.id == r.author.id)}">
-								<button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i>
-									Modifica</button>
+								<a><button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i>
+										Modifica</button></a>
 								<button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i>
 									Elimina</button>
 							</div>
@@ -150,9 +151,11 @@
 					<!-- Bottoni Azione -->
 					<div class="recipe-actions"
 						th:if="${isAdmin or (currentUser != null and currentUser.id == recipe.author.id)}">
-						<button class="btn btn-primary" style="flex: 1;">
-							<i class="fa-solid fa-pen"></i> Modifica Ricetta
-						</button>
+						<a th:href="@{/editRecipe/{id}(id=${recipe.id})}">
+							<button class="btn btn-primary" style="flex: 1;">
+								<i class="fa-solid fa-pen"></i> Modifica Ricetta
+							</button>
+						</a>
 						<button class="btn btn-delete-recipe" title="Elimina Ricetta">
 							<i class="fa-regular fa-trash-can"></i> Elimina
 						</button>

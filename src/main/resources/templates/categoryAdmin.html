@@ -94,8 +94,8 @@
 							<tbody>
 								<!-- Riga 1 -->
 								<tr th:each="c : ${categoryList}">
-									<td class="col-primary" th:text="${c.name}">Primi Piatti</td>
-									<td th:text="${c.description}">Pasta, risotti, zuppe e minestre della tradizione.</td>
+									<td class="col-primary" th:text="${c.name}"></td>
+									<td th:text="${c.description}"></td>
 									<td>
 										<div class="action-buttons">
 											<a th:href="@{/admin/editCategory/{id}(id=${c.id})}"><button class="btn-icon btn-edit" title="Modifica">
