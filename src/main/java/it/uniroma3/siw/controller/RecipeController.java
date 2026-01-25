@@ -36,6 +36,10 @@ public class RecipeController {
 	@Autowired
 	CategoryService categoryService;
 
+	
+	/*
+	 * VISUALIZZAZIONE
+	 * */
 	@GetMapping("/recipe/{id}")
 	public String getRecipe(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("isLogged", userService.isLogged());
@@ -58,6 +62,9 @@ public class RecipeController {
 		return "recipeList";
 	}
 
+	/*
+	 * CREAZIONE RICETTA
+	 * */
 	@GetMapping("/formNewRecipe")
 	public String formNewRecipe(@ModelAttribute("recipe") Recipe recipe, Model model) {
 		/* -- INFO NECESSARIE PER SIDEBAR -- */
@@ -170,6 +177,9 @@ public class RecipeController {
 		return "redirect:/recipe/"+id;
 	}
 
+	/*
+	 * MODIFICA RICETTA
+	 * */
 	@GetMapping("/editRecipe/{id}")
 	public String editRecipe(@PathVariable Long id, @ModelAttribute("recipe") Recipe recipe, Model model) {
 		model.addAttribute("isLogged", userService.isLogged());
@@ -282,6 +292,10 @@ public class RecipeController {
 			Ingredient nuovoIng = recipe.getIngredients().get(index);
 			if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
 				recipeDB.getIngredients().add(nuovoIng);
+				
+				//rimuovi tutti gli ingredienti vuoti prima di salvare
+				recipeDB = recipeService.removeEmptyIngredients(recipeDB);
+				
 				recipeService.save(recipeDB); // Salva l'aggiunta
 				return"redirect:/editRecipeIngredients/"+id;
 			}
@@ -304,4 +318,19 @@ public class RecipeController {
 		}
 		return "redirect:/";
 	}
+	
+	/*
+	 * ELIMINAZIONE RICETTA
+	 * */
+	
+	@GetMapping("/deleteRecipe/{id}")
+	public String deleteRecipe(@PathVariable("id")Long id,
+			Model model) {
+		Recipe recipe = recipeService.findRecipeById(id);
+		if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			return "redirect:/";
+		recipeService.delete(recipe);
+		return "redirect:/";
+	}
+	
 }

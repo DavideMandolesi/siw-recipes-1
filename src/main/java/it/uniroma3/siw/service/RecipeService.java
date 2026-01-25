@@ -21,6 +21,10 @@ public class RecipeService {
 		return recipeRepository.findById(id);
 	}
 	
+	public Recipe findRecipeById(Long id) {
+		return recipeRepository.findById(id).orElse(null);
+	}
+	
 	public int getLastEmptyIngredientIndex(Recipe r) {
 		if(!r.getIngredients().isEmpty()) {
         	//non è vuota, assicurati che l'ultimo elemento sia vuoto
@@ -38,7 +42,18 @@ public class RecipeService {
 		recipe.setIsActive(true);
 	}
 
-	public Recipe findRecipeById(Long id) {
-		return recipeRepository.findById(id).get();
+	public Recipe removeEmptyIngredients(Recipe recipe) {
+		for (int j = 0; j < recipe.getIngredients().toArray().length; j++) {
+			if(recipe.getIngredients().get(j)==null) {
+				recipe.getIngredients().remove(j);
+			}
+			else if(recipe.getIngredients().get(j).getName().isBlank())
+				recipe.getIngredients().remove(j);
+		}
+		return recipe;
+	}
+	
+	public void delete(Recipe recipe) {
+		recipeRepository.delete(recipe); 
 	}
 }

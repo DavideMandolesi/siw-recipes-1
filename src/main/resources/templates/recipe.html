@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Lasagna Classica alla Bolognese - GustoWeb</title>
+	<title>SiwRecipes - Ricetta</title>
 	<!-- Icone -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -156,9 +156,11 @@
 								<i class="fa-solid fa-pen"></i> Modifica Ricetta
 							</button>
 						</a>
-						<button class="btn btn-delete-recipe" title="Elimina Ricetta">
-							<i class="fa-regular fa-trash-can"></i> Elimina
-						</button>
+						<a th:href="@{/deleteRecipe/{id}(id=${recipe.id})}">
+							<button class="btn btn-delete-recipe" title="Elimina Ricetta">
+								<i class="fa-regular fa-trash-can"></i> Elimina
+							</button>
+						</a>
 					</div>
 
 					<!-- Autore -->

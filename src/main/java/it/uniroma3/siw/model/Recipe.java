@@ -45,10 +45,10 @@ public class Recipe {
 	@ManyToOne // Collegamento alla nuova entità Category
     private Category category;
 
-	@OneToMany(mappedBy="recipe")
+	@OneToMany(mappedBy="recipe",cascade = CascadeType.REMOVE)
 	private List<Review> reviews;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private User author;
 
 	/* ==============================
