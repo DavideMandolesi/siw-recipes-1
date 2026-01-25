@@ -65,10 +65,9 @@
 		<!-- MAIN CONTENT -->
 		<main class="main-content">
 
-			<form th:action="@{/confirmNewIngredient}" method="POST" th:object="${recipe}">
+			<form th:action="@{/confirmNewIngredient/{id}(id=${recipe.id})}" method="POST" th:object="${recipe}">
 				<!--<input type="hidden" name="recipeId" th:value="${recipe.id}" />-->
 				<input type="hidden" name="ingIndex" th:value="${ingIndex}" />
-				<input type="hidden" th:field="*{id}" />
 
 				<!-- HEADER: Titolo e Bottoni Azione -->
 				<header class="editor-top-bar">
@@ -144,7 +143,7 @@
 					<footer class="editor-footer">
 						<div class="editor-actions">
 							<a th:href="@{/}" class="link-cancel">Annulla</a>
-							<a th:href="@{/confirmRecipe(recipeId=${recipe.id})}" class="btn btn-second">
+							<a th:href="@{/confirmRecipe/{id}(id=${recipe.id})}" class="btn btn-second">
 								<i class="fa-regular fa-floppy-disk"></i> Pubblica Ricetta
 							</a>
 							<button type="submit" class="btn btn-primary">

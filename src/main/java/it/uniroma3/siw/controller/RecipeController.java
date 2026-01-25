@@ -98,14 +98,11 @@ public class RecipeController {
 		// imposta flag temporaneo=true
 		recipeService.save(recipe);
 
-		redirectAttributes.addFlashAttribute("recipeId", recipe.getId());
-
-		return "redirect:/formNewIngredient";
+		return "redirect:/formNewIngredient/"+recipe.getId();
 	}
 
-	@GetMapping("/formNewIngredient")
-	public String formNewIngredient(@ModelAttribute("recipeId") Long recipeId,
-			// RedirectAttributes redirectAttributes,
+	@GetMapping("/formNewIngredient/{id}")
+	public String formNewIngredient(@PathVariable("id") Long id,
 			Model model) {
 		// qui dentro non si può refreshare la pagina altrimenti si perde il riferimento
 		// a recipeId (rimane in sessione solo
@@ -120,7 +117,7 @@ public class RecipeController {
 
 		// Se l'ID non è stato passato (es. accesso diretto all'URL), reindirizza alla
 		// creazione
-		if (recipeId == null) {
+		if (id == null) {
 			// String errorMsg = messageSource.getMessage("error.recipe.null_or_invalid_id",
 			// null, LocaleContextHolder.getLocale());
 			// model.addAttribute("errorMessage", errorMsg);
@@ -129,7 +126,7 @@ public class RecipeController {
 			return "redirect:/formNewRecipe";
 		}
 
-		Optional<Recipe> recipe = recipeService.findById(recipeId);
+		Optional<Recipe> recipe = recipeService.findById(id);
 		// non è stato trovato alcuna ricetta con quell'id
 		if (recipe.isEmpty()) {
 			// String errorMsg = messageSource.getMessage("error.recipe.null_or_invalid_id",
@@ -147,28 +144,27 @@ public class RecipeController {
 		return "formNewIngredient";
 	}
 
-	@PostMapping("/confirmNewIngredient")
+	@PostMapping("/confirmNewIngredient/{id}")
 	@Transactional
 	public String confirmNewIngredient(@ModelAttribute("recipe") Recipe recipe, // Recupera dal form
+			@PathVariable("id") Long id,
 			@RequestParam("ingIndex") int index, // Passiamo l'indice
 			RedirectAttributes redirectAttributes, Model model) {
 
 		// questo è l'oggetto con tutte le info tranne l'utlimo ingrediente
-		Recipe recipeDB = recipeService.findById(recipe.getId()).get();
+		Recipe recipeDB = recipeService.findRecipeById(id);
 		Ingredient nuovoIng = recipe.getIngredients().get(index);
 		if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
 			recipeDB.getIngredients().add(nuovoIng);
 			recipeService.save(recipeDB); // Salva l'aggiunta
 		}
 
-		redirectAttributes.addFlashAttribute("recipeId", recipeDB.getId());
-
-		return "redirect:/formNewIngredient";
+		return "redirect:/formNewIngredient/"+id;
 	}
 
-	@GetMapping("/confirmRecipe")
+	@GetMapping("/confirmRecipe/{id}")
 	@Transactional
-	public String confirmRecipe(@RequestParam("recipeId") Long id) {
+	public String confirmRecipe(@PathVariable("id") Long id) {
 		recipeService.findById(id).ifPresent(r -> {
 			recipeService.setActive(r);
 			r.setCreationDate(LocalDate.now(ZoneId.of("GMT")));
@@ -207,7 +203,7 @@ public class RecipeController {
 										 * , RedirectAttributes redirectAttributes
 										 */) {
 		if (bindingResult.hasErrors()) {
-			return "formEditRecipe/" + recipeId;
+			return "redirect:/formEditRecipe/" + recipeId;
 		}
 		
 		Recipe recipeDB = recipeService.findRecipeById(recipeId);
