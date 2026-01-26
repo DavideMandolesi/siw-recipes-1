@@ -108,7 +108,6 @@ public class ReviewController {
 			return"redirect:/recipe/"+review.getRecipe().getId();
 		}
 		return "redirect:/";
-		
 	}
 	
 }

@@ -28,12 +28,18 @@
 				<div class="menu-section">
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
-						<li class="active"><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a></li>
+					</ul>
+				</div>
 
+				<div class="menu-section">
+					<span class="menu-label">LA MIA CUCINA</span>
+					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
-						<li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<!--<li><a href="#"><i class="fa-regular fa-heart"></i> Preferiti</a></li>-->
-						<li><a href="#"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<li><a th:href="@{#}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
 					</ul>
 				</div>
 
@@ -41,26 +47,25 @@
 				<div class="menu-section" th:if="${isAdmin}">
 					<span class="menu-label">AMMINISTRAZIONE</span>
 					<ul>
-						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-shield-halved"></i> Gestisci Categorie</a></li>
-						<li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+						<li class="active"><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci Categorie</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
 					</ul>
 				</div>
 			</nav>
 
 			<div class="user-profile">
-				<a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
 						class="user-avatar-sb"></a>
 				<div class="user-info">
-					<a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
 							}></span></a>
-					<a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
-					<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
 				</div>
 
-				<a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+				<a th:href="@{/logout}" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
 			</div>
 		</aside>
-
 
 
 		<!-- MAIN CONTENT -->
@@ -79,7 +84,8 @@
 				<!-- Colonna Sinistra: Lista Categorie -->
 				<section class="admin-list-section">
 					<div class="list-header">
-						<h3 th:text="'Elenco Categorie (' + ${#lists.size(categoryList)} + ')'">Elenco Categorie (0)</h3>
+						<h3 th:text="'Elenco Categorie (' + ${#lists.size(categoryList)} + ')'">Elenco Categorie (0)
+						</h3>
 					</div>
 
 					<div class="admin-table-container">
@@ -98,16 +104,18 @@
 									<td th:text="${c.description}"></td>
 									<td>
 										<div class="action-buttons">
-											<a th:href="@{/admin/editCategory/{id}(id=${c.id})}"><button class="btn-icon btn-edit" title="Modifica">
-												<i class="fa-solid fa-pen"></i>
-											</button></a>
-											<a th:href="@{/admin/deleteCategory/{id}(id=${c.id})}"><button class="btn-icon btn-delete" title="Elimina">
-												<i class="fa-regular fa-trash-can"></i>
-											</button></a>
+											<a th:href="@{/admin/editCategory/{id}(id=${c.id})}"><button
+													class="btn-icon btn-edit" title="Modifica">
+													<i class="fa-solid fa-pen"></i>
+												</button></a>
+											<a th:href="@{/admin/deleteCategory/{id}(id=${c.id})}"><button
+													class="btn-icon btn-delete" title="Elimina">
+													<i class="fa-regular fa-trash-can"></i>
+												</button></a>
 										</div>
 									</td>
 								</tr>
-								
+
 							</tbody>
 						</table>
 					</div>
@@ -117,18 +125,20 @@
 				<section class="admin-form-section">
 					<div class="form-card">
 						<h3>Aggiungi Categoria</h3>
-						
+
 						<!-- AGGIUNGI CHECK ERRORI PER INSERIMENTO NUOVA CATGORIA (come cat già esistente) -->
-						
+
 						<p class="form-desc">Inserisci i dettagli per creare una nuova classificazione.</p>
 
 						<form th:action="@{/admin/confirmNewCategory}" method="POST" th:object="${category}">
 							<label class="label">Nome Categoria</label>
-							<input type="text" class="admin-input" placeholder="Es. Antipasti" required th:field="${category.name}">
+							<input type="text" class="admin-input" placeholder="Es. Antipasti" required
+								th:field="${category.name}">
 
 							<label class="label">Descrizione</label>
 							<textarea class="admin-input admin-textarea"
-								placeholder="Breve descrizione della categoria..." name="description"required th:field="${category.description}"></textarea>
+								placeholder="Breve descrizione della categoria..." name="description" required
+								th:field="${category.description}"></textarea>
 
 							<button type="submit" class="btn btn-primary" style="width: 100%;">
 								<i class="fa-solid fa-plus"></i> Crea Categoria

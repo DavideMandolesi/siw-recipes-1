@@ -29,12 +29,19 @@
 				<div class="menu-section">
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
-						<li class="active"><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li class="active"><a th:href="@{#}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a>
+						</li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a></li>
+					</ul>
+				</div>
 
+				<div class="menu-section">
+					<span class="menu-label">LA MIA CUCINA</span>
+					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
-						<li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<!--<li><a href="#"><i class="fa-regular fa-heart"></i> Preferiti</a></li>-->
-						<li><a href="#"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<li><a th:href="@{#}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
 					</ul>
 				</div>
 
@@ -42,23 +49,24 @@
 				<div class="menu-section" th:if="${isAdmin}">
 					<span class="menu-label">AMMINISTRAZIONE</span>
 					<ul>
-						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-shield-halved"></i> Gestisci Categorie</a></li>
-						<li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci
+								Categorie</a></li>
+						<li><a th:href="@{#}"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
 					</ul>
 				</div>
 			</nav>
 
 			<div class="user-profile">
-				<a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
 						class="user-avatar-sb"></a>
 				<div class="user-info">
-					<a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
 							}></span></a>
-					<a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
-					<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
 				</div>
 
-				<a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+				<a th:href="@{/logout}" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
 			</div>
 		</aside>
 
@@ -123,19 +131,23 @@
 
 						</div>
 
-						<div class="ingredients-section" th:if="${!recipe.ingredients.isEmpty()}">
-							<label class="form-label" )>Ingredienti Inseriti fin ora</label>
-							<div class="ingredient-row">
-								<ul>
-									<li th:each="ing : ${recipe.ingredients}"
-										th:if="${ing.name != null && !ing.name.isEmpty()}">
-										<span th:text="${ing.name}">Nome</span>
-										<span th:text="${ing.quantity}">Quantity</span>
-										<span th:text="${ing.unit}">Unit</span>
-									</li>
-								</ul>
-
-							</div>
+						<div class="inserted-ingredients-wrapper" th:if="${!recipe.ingredients.isEmpty()}">
+							<h4 class="list-title"><i class="fa-solid fa-list-check"></i> Ingredienti inseriti finora:
+							</h4>
+							<!--<label class="form-label" )>Ingredienti inseriti finora:</label>-->
+							<ul class="inserted-list">
+								<li class="inserted-item" th:each="ing : ${recipe.ingredients}"
+									th:if="${ing.name != null && !ing.name.isEmpty()}">
+									<div class="item-info">
+										<i class="fa-solid fa-check check-icon"></i>
+										<span class="item-name" th:text="${ing.name}">Nome Ingrediente</span>
+									</div>
+									<div class="item-dose">
+										<span th:text="${ing.quantity}">0</span>
+										<span th:text="${ing.unit}" class="unit-text">g</span>
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
 

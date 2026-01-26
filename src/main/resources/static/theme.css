@@ -186,7 +186,7 @@ ul {
 }
 
 .menu-section {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .menu-label {
@@ -194,7 +194,7 @@ ul {
     font-size: 0.7rem;
     font-weight: 700;
     color: var(--text-light);
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -231,7 +231,7 @@ ul {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-top: 20px;
+	padding-top:20px;
     border-top: 1px solid rgba(0,0,0,0.05);
 }
 .user-avatar-sb{
