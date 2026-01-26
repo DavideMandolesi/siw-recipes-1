@@ -13,4 +13,13 @@ public class ReviewService {
 	public Review save(Review review) {
 		return reviewRepository.save(review);
 	}
+	
+	public Review findReviewById(Long id) {
+		return reviewRepository.findById(id).orElse(null);
+	}
+	
+	public void deleteReview(Review review) {
+		reviewRepository.delete(review);
+	}
+	
 }

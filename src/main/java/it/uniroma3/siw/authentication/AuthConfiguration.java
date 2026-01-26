@@ -54,11 +54,13 @@ public class AuthConfiguration {
         // chiunque (autenticato o no) può accedere alle pagine index, login, register, error ai css e alle immagini
         .requestMatchers(HttpMethod.GET,"/","/login","/formNewUser","/register","/error","/static/**", "/images/**", "favicon.ico").permitAll()
         .requestMatchers(HttpMethod.GET,"/profile","/formNewRecipe","/formNewIngredient/**","/confirmRecipe/**","/editRecipe/**",
-        		"/editRecipeIngredients/**","/removeRecipeIngredient/**","/confirmRecipeEditUltimated/**","/deleteRecipe/**").authenticated()
+        		"/editRecipeIngredients/**","/removeRecipeIngredient/**","/confirmRecipeEditUltimated/**","/deleteRecipe/**",
+        		"/formNewReview/**").authenticated()
         
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
         .requestMatchers(HttpMethod.POST, "/login","/register").permitAll()
-        .requestMatchers(HttpMethod.POST, "/confirmNewRecipe","/confirmNewIngredient/**","/confirmEditRecipe/**","/confirmNewIngredientEdit/**").authenticated()
+        .requestMatchers(HttpMethod.POST, "/confirmNewRecipe","/confirmNewIngredient/**","/confirmEditRecipe/**","/confirmNewIngredientEdit/**",
+        		"/confirmReviewCreation/**").authenticated()
         
         .requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
         .requestMatchers(HttpMethod.POST,"/admin/**").hasAnyAuthority(ADMIN_ROLE)

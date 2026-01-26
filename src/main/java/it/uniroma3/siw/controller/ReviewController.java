@@ -39,7 +39,7 @@ public class ReviewController {
 			model.addAttribute("recipe",recipe);
 			return "formNewReview";
 		}
-		return"redirect:/home";
+		return"redirect:/";
 	}
 	
 	@PostMapping("/confirmReviewCreation/{recipeId}")
@@ -56,11 +56,59 @@ public class ReviewController {
 			review.setAuthor(userService.getCurrentUser());
 			reviewService.save(review);
 			
-			//recipe.getReviews().add(review);
-			//recipeService.save(recipe);
-			
-			return"redirect:/recipe/"+recipe.getId();
+			return"redirect:/recipe/"+recipeId;
 		}
-		else return "redirect:/home";
+		else return "redirect:/";
 	}
+	
+	@GetMapping("/editReview/{reviewId}")
+	public String editReview(@PathVariable("reviewId") Long reviewId, Model model) {
+		Review review = reviewService.findReviewById(reviewId);
+		if(review!=null) {
+			if(! (userService.getCurrentUser().getId()==review.getAuthor().getId()||userService.isAdmin()) )
+				return"redirect:/recipe/"+review.getRecipe().getId();
+			model.addAttribute("isLogged",userService.isLogged());
+			model.addAttribute("isAdmin",userService.isAdmin());
+			model.addAttribute("currentUser", userService.getCurrentUser());
+			model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+			model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
+			
+			model.addAttribute("review",review);
+			model.addAttribute("recipe",review.getRecipe());
+			return"formEditReview";
+		}
+		return "redirect:/";
+	}
+	
+	@PostMapping("/confirmReviewEdit/{reviewId}")
+	public String confirmReviewEdit(@PathVariable("reviewId") Long reviewId,
+			@ModelAttribute("review") Review review, 
+			Model model) {
+		
+		Review reviewDB = reviewService.findReviewById(reviewId);
+		if(reviewDB!=null) {
+			if(! (userService.getCurrentUser().getId()==reviewDB.getAuthor().getId()||userService.isAdmin()) )
+				return"redirect:/recipe/"+reviewDB.getRecipe().getId();
+			
+			reviewDB.setRating(review.getRating());
+			reviewDB.setText(review.getText());
+			reviewService.save(reviewDB);
+			return"redirect:/recipe/"+reviewDB.getRecipe().getId();
+		}
+		return "redirect:/";
+	}
+	
+	@GetMapping("/deleteReview/{reviewId}")
+	public String deleteReview(@PathVariable("reviewId") Long reviewId, Model model) {
+		Review review = reviewService.findReviewById(reviewId);
+		if(review!=null) {
+			if(! (userService.getCurrentUser().getId()==review.getAuthor().getId()||userService.isAdmin()) )
+				return"redirect:/recipe/"+review.getRecipe().getId();
+			reviewService.deleteReview(review);
+			return"redirect:/recipe/"+review.getRecipe().getId();
+		}
+		return "redirect:/";
+		
+	}
+	
 }

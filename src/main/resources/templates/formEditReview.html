@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SiwRecipe - Modifica Recensione</title>
+	<!-- Icone -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+	<!-- CSS Files -->
+	<link rel="stylesheet" th:href="@{/theme.css}" href="theme.css">
+	<link rel="stylesheet" th:href="@{/review.css}" href="review.css">
+</head>
+
+<body>
+
+	<div class="app-container">
+
+		<!-- SIDEBAR -->
+		<aside class="sidebar">
+			<div class="brand">
+				<div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+				<h1>SiwRecipes</h1>
+			</div>
+
+			<nav class="sidebar-menu">
+				<div class="menu-section">
+					<span class="menu-label">MENU PRINCIPALE</span>
+					<ul>
+						<li class="active"><a href="#"><i class="fa-solid fa-house"></i> Esplora Ricette</a></li>
+
+						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
+						<li><a href="#"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<!--<li><a href="#"><i class="fa-regular fa-heart"></i> Preferiti</a></li>-->
+						<li><a href="#"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+					</ul>
+				</div>
+
+				<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
+				<div class="menu-section" th:if="${isAdmin}">
+					<span class="menu-label">AMMINISTRAZIONE</span>
+					<ul>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-shield-halved"></i> Gestisci
+								Categorie</a></li>
+						<li><a href="#"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<div class="user-profile">
+				<a href="/profile"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+						class="user-avatar-sb"></a>
+				<div class="user-info">
+					<a href="/profile"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
+					<a href="/profile" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a href="/profile" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+				</div>
+
+				<a href="/logout" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+			</div>
+		</aside>
+
+		<!-- MAIN CONTENT -->
+		<main class="main-content" style="background-color: #F3F4F6;">
+
+			<!-- Page Grid -->
+			<div class="review-page-grid">
+
+				<!-- COLONNA SINISTRA: Anteprima Ricetta -->
+				<aside class="recipe-preview-column">
+					<article class="recipe-preview-card">
+						<div class="preview-image">
+							<img  th:src="${recipe.urlImage} ?: ${defaultRecipeUrlImage}">
+						</div>
+						<div class="preview-body">
+							<h3 class="preview-title" th:text="${recipe.title}"></h3>
+							<p class="preview-desc" th:text="${recipe.shortDescription}"></p>
+
+							<div class="preview-author">
+								<img th:src="${recipe.author.urlImage} ?: ${defaultUserUrlImage}" class="avatar-sm">
+								<span th:text="${recipe.author.credentials.username}"></span>
+							</div>
+						</div>
+					</article>
+				</aside>
+
+				<!-- COLONNA DESTRA: Form Recensione -->
+				<section class="review-form-column">
+					<div class="review-form-wrapper">
+
+						<div class="form-header-simple">
+							<h2>Modifica la tua recensione</h2>
+							<p>Condividi la tua esperienza con questa ricetta. Le recensioni aiutano gli altri utenti.</p>
+						</div>
+
+						<form th:action="@{/confirmReviewEdit/{reviewId}(reviewId=${review.id})}" method="POST" th:object="${review}">
+							<!-- Rating System (Input Radio Nascosti) -->
+							<div class="form-group">
+								<label class="label">Valutazione</label>
+
+								<div class="star-rating-widget">
+									<!-- Ordine inverso per CSS (5 a 1) per gestire il "fill" con il selettore sibling ~ -->
+									<input type="radio" id="star5" th:field="*{rating}" value="5" required>
+									<label for="star5" title="5 stelle"><i class="fa-solid fa-star"></i></label>
+
+									<input type="radio" id="star4" th:field="*{rating}" value="4">
+									<label for="star4" title="4 stelle"><i class="fa-solid fa-star"></i></label>
+
+									<input type="radio" id="star3" th:field="*{rating}" value="3">
+									<label for="star3" title="3 stelle"><i class="fa-solid fa-star"></i></label>
+
+									<input type="radio" id="star2" th:field="*{rating}" value="2">
+									<label for="star2" title="2 stelle"><i class="fa-solid fa-star"></i></label>
+
+									<input type="radio" id="star1" th:field="*{rating}" value="1">
+									<label for="star1" title="1 stella"><i class="fa-solid fa-star"></i></label>
+								</div>
+								<span class="helper-text">Seleziona da 1 a 5 stelle</span>
+							</div>
+
+							<!-- Testo Recensione -->
+							<div class="form-group">
+								<label class="label">La tua recensione</label>
+								<textarea class="admin-input admin-textarea review-textarea" th:field="*{text}"
+									placeholder="Racconta cosa ti è piaciuto o cosa miglioreresti..." maxlength="500"
+									oninput="document.getElementById('charCount').textContent = this.value.length + ' / 500'"></textarea>
+								<div class="char-counter" id="charCount">0 / 500</div>
+							</div>
+
+							<!-- Bottoni -->
+							<div class="form-actions-row">
+								<a href="#" class="btn btn-outline-admin" style="height: 44px;">Annulla</a>
+								<button type="submit" class="btn btn-primary" style="height: 44px;">
+									<i class="fa-regular fa-paper-plane"></i> Pubblica Recensione
+								</button>
+							</div>
+
+						</form>
+					</div>
+				</section>
+
+			</div>
+		</main>
+	</div>
+
+</body>
+
+</html>

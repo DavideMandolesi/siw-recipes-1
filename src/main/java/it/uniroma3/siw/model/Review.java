@@ -15,7 +15,7 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column(nullable = false)
+	@Column(length = 5000, nullable = false)
 	private String text;
 	@Column(nullable = false)
 	private int rating;

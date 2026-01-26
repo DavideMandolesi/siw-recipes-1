@@ -81,7 +81,7 @@
 
 						<div class=" hero-badge badge-dark">
 							<span class="badge-label">Difficoltà</span>
-							<span th:text="${recipe.title}"></span>
+							<span th:text="${recipe.difficulty}"></span>
 						</div>
 
 						<div class="hero-badge badge-dark">
@@ -136,10 +136,16 @@
 							<div class="review-body" th:text="${r.text}"></div>
 							<div class="review-actions"
 								th:if="${isAdmin or (currentUser != null and currentUser.id == r.author.id)}">
-								<a><button class="review-action-btn action-edit"><i class="fa-solid fa-pen"></i>
-										Modifica</button></a>
-								<button class="review-action-btn action-delete"><i class="fa-regular fa-trash-can"></i>
-									Elimina</button>
+								<a th:href="@{/editReview/{reviewId}(reviewId=${r.id})}">
+									<button class="review-action-btn action-edit">
+										<i class="fa-solid fa-pen"></i>Modifica
+									</button>
+								</a>
+								<a th:href="@{/deleteReview/{reviewId}(reviewId=${r.id})}">
+									<button class="review-action-btn action-delete">
+										<i class="fa-regular fa-trash-can"></i>Elimina
+									</button>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -167,7 +173,7 @@
 					<div class="widget-box">
 						<h4 class="widget-title"></h4>
 						<div class="author-widget">
-							<img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+							<img th:src="${recipe.author.urlImage} ?: ${defaultProfileUrlImage}"
 								class="author-avatar-lg">
 							<div class="author-details">
 								<h4 th:text="${recipe.author.credentials.username}"></h4>
