@@ -302,7 +302,7 @@ public class RecipeController {
 
 	@GetMapping("/confirmRecipeEditUltimated/{id}")
 	@Transactional
-	public String confirmRecipeEditUltimated(@RequestParam("id") Long id) {
+	public String confirmRecipeEditUltimated(@PathVariable("id") Long id) {
 		
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (recipe != null) {
