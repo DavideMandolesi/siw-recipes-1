@@ -163,7 +163,17 @@
     color: var(--text-gray);
 }
 
+.author img {
+    width: 32px;        /* Dimensione fissa */
+    height: 32px;       /* Dimensione fissa */
+    border-radius: 50%; /* Rende l'immagine tonda */
+    object-fit: cover;  /* Evita che l'immagine si deformi/sgrani */
+    object-position: center;
+    border: 1px solid var(--border-color); /* Opzionale: aggiunge un leggero bordo */
+}
+
 .difficulty {
     font-size: 0.85rem;
     color: var(--text-light);
 }
+

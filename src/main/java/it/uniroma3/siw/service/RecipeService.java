@@ -1,5 +1,6 @@
 package it.uniroma3.siw.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,26 @@ public class RecipeService {
 	
 	public void delete(Recipe recipe) {
 		recipeRepository.delete(recipe); 
+	}
+
+	public List<Recipe> getLatest4Recipes() {
+		return recipeRepository.findTop4ByIsActiveTrueOrderByCreationDateDesc();
+	}
+	
+	public List<Recipe> getAllRecipes() {
+		return (List<Recipe>)recipeRepository.findAll();
+	}
+
+	public List<Recipe> searchRecipes(String title, Long categoryId, String difficulty) {
+		// Se i parametri sono stringhe vuote, li tratto come null	    
+		String titleParam = null;
+	    if (title != null && !title.isBlank()) {
+	        // Prepara la stringa lowercase compatibile alla ricerca parziale: "Pasta" diventa "%pasta%"
+	        titleParam = "%" + title.toLowerCase() + "%";
+	    }
+	    if(title != null && title.isBlank()) {titleParam=null;}
+	    if(difficulty != null && difficulty.isBlank()) {difficulty=null;}
+	    
+		return recipeRepository.findByFilters(titleParam, categoryId, difficulty);
 	}
 }

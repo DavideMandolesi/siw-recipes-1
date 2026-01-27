@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>SiwRecipes</title>
+	<title>SiwRecipes - Esplora Ricette</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<!-- Icone -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,6 +11,7 @@
 	<link rel="stylesheet" th:href="@{/theme.css}">
 	<!-- CSS Specifico (Layout) -->
 	<link rel="stylesheet" th:href="@{/homeLayout.css}">
+	<link rel="stylesheet" th:href="@{/recipe.css}">
 </head>
 
 
@@ -28,8 +29,9 @@
 				<div class="menu-section">
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
-						<li class="active"><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
-						<li><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li class="active"><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora
+								Ricette</a></li>
 						<li><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a></li>
 					</ul>
 				</div>
@@ -74,9 +76,10 @@
 			<!-- TOP BAR -->
 			<header class="top-bar">
 				<div class="titles">
-					<h2>Ultime Ricette</h2>
-					<p class="subtitle">Scopri le creazioni più recenti della community.</p>
+					<h2>Tutte le Ricette</h2>
+					<p class="subtitle">Scopri le tutte le prelibatezze da una community di appassionati.</p>
 				</div>
+
 				<div class="button-container">
 					<a th:href="@{/formNewRecipe}">
 						<button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button>
@@ -88,16 +91,59 @@
 
 			</header>
 
+			<!-- HERO / FILTERS -->
+			<section class="content-header">
+				<form th:action="@{/recipeList}" method="get" class="filter-card single-row">
+
+					<!-- Search Bar -->
+					<div class="search-container flex-grow">
+						<i class="fa-solid fa-magnifying-glass search-icon"></i>
+						<input type="text" name="title" th:value="${param.title}" placeholder="Cerca per nome..."
+							class="search-input">
+					</div>
+
+					<!-- Select Categoria -->
+					<select name="categoryId" class="custom-select">
+						<option value="">Tutte le Categorie</option>
+						<option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
+							th:selected="${param.categoryId != null and param.categoryId[0] == cat.id.toString()}">
+						</option>
+					</select>
+
+					<!-- Select Difficoltà -->
+					<select name="difficulty" class="custom-select">
+						<option value="">Difficoltà</option>
+						<option value="Facile"
+							th:selected="${param.difficulty != null and param.difficulty[0] == 'Facile'}">Facile
+						</option>
+						<option value="Media"
+							th:selected="${param.difficulty != null and param.difficulty[0] == 'Media'}">Media</option>
+						<option value="Difficile"
+							th:selected="${param.difficulty != null and param.difficulty[0] == 'Difficile'}">Difficile
+						</option>
+					</select>
+
+					<!-- Bottoni -->
+					<div class="buttons-group">
+						<button type="submit" class="btn btn-primary">Filtra</button>
+						<a th:href="@{/recipeList}" class="btn-reset">Resetta</a>
+					</div>
+
+				</form>
+			</section>
+
+
+
 			<!-- RECIPE GRID -->
 			<section class="recipe-grid">
 
 				<!-- Messaggio mostrato solo se la lista è vuota o null -->
-				<div th:if="${latestRecipes == null or latestRecipes.isEmpty()}" class="no-recipes-message">
-					<p>Al momento non ci sono ricette disponibili. Torna a trovarci presto!</p>
+				<div th:if="${queryRecipes == null or queryRecipes.isEmpty()}" class="no-recipes-message">
+					<p>Al momento non ci sono ricette disponibili o la ricerca che hai effettuato non ha trovato riscontri. Torna a trovarci presto!</p>
 				</div>
 
 				<!-- Card Ricette -->
-				<article class="card" th:each="recipe : ${latestRecipes}" th:unless="${latestRecipes.isEmpty()}">
+				<article class="card" th:each="recipe : ${queryRecipes}" th:unless="${queryRecipes.isEmpty()}">
 					<div class="card-image">
 						<a th:href="@{/recipe/{id}(id=${recipe.id})}" }>
 							<img th:src="${recipe.urlImage} ?: ${defaultRecipeUrlImage}">

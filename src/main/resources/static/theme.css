@@ -231,14 +231,14 @@ ul {
     display: flex;
     align-items: center;
     gap: 12px;
-	padding-top:20px;
+	padding-top:24px;
     border-top: 1px solid rgba(0,0,0,0.05);
 }
 .user-avatar-sb{
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
-	object-fit: contain;
+	object-fit: cover;
 	object-position: center;
 }
 

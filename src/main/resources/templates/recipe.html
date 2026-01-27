@@ -143,7 +143,7 @@
 							<div class="review-body" th:text="${r.text}"></div>
 							<div class="review-actions"
 								th:if="${isAdmin or (currentUser != null and currentUser.id == r.author.id)}">
-								<a th:href="@{/editReview/{reviewId}(reviewId=${r.id})}">
+								<a th:href="@{/editReview/{reviewId}(reviewId=${r.id})}" th:if="${currentUser != null and currentUser.id == r.author.id}">
 									<button class="review-action-btn action-edit">
 										<i class="fa-solid fa-pen"></i>Modifica
 									</button>
@@ -164,7 +164,7 @@
 					<!-- Bottoni Azione -->
 					<div class="recipe-actions"
 						th:if="${isAdmin or (currentUser != null and currentUser.id == recipe.author.id)}">
-						<a th:href="@{/editRecipe/{id}(id=${recipe.id})}">
+						<a th:href="@{/editRecipe/{id}(id=${recipe.id})}" th:if="${currentUser != null and currentUser.id == recipe.author.id}">
 							<button class="btn btn-primary" style="flex: 1;">
 								<i class="fa-solid fa-pen"></i> Modifica Ricetta
 							</button>

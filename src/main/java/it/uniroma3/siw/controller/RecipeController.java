@@ -58,10 +58,25 @@ public class RecipeController {
 	}
 
 	@GetMapping("/recipeList")
-	public String getRecipeList() {
+	public String getRecipeList(@RequestParam(required = false) String title,
+	        @RequestParam(required = false) Long categoryId,
+	        @RequestParam(required = false) String difficulty,
+	        Model model) {
+		model.addAttribute("isLogged",userService.isLogged());
+		model.addAttribute("isAdmin",userService.isAdmin());
+		model.addAttribute("currentUser", userService.getCurrentUser());
+		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
+				
+	    List<Recipe> recipes = recipeService.searchRecipes(title, categoryId, difficulty);
+	    
+		model.addAttribute("queryRecipes", recipes);
+	    model.addAttribute("categories", categoryService.getAllCategories());
+		
 		return "recipeList";
 	}
-
+	
+	
 	/*
 	 * CREAZIONE RICETTA
 	 * */
@@ -187,7 +202,7 @@ public class RecipeController {
 		Recipe r = recipeService.findRecipeById(id);
 
 		if (r != null) {
-			if (!(r.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(r.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + r.getId();
 			model.addAttribute("recipe", r);
 			return "formEditRecipe";
@@ -208,7 +223,7 @@ public class RecipeController {
 		
 		Recipe recipeDB = recipeService.findRecipeById(recipeId);
 		if(recipeDB!=null) {
-			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + recipeId;
 			
 			recipeDB.setTitle(recipe.getTitle());
@@ -239,7 +254,7 @@ public class RecipeController {
 		Recipe recipe = recipeService.findRecipeById(id);
 
 		if (recipe != null) {
-			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
 			model.addAttribute(recipe);
 			model.addAttribute("ingIndex", recipeService.getLastEmptyIngredientIndex(recipe));
@@ -259,7 +274,7 @@ public class RecipeController {
 		Recipe recipe = recipeService.findRecipeById(id);
 		
 		if (recipe != null) {
-			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
 			
 			recipe.getIngredients().remove(index);
@@ -282,7 +297,7 @@ public class RecipeController {
 		Recipe recipeDB = recipeService.findRecipeById(id);
 		
 		if (recipeDB != null) {
-			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
 			
 			Ingredient nuovoIng = recipe.getIngredients().get(index);
@@ -306,7 +321,7 @@ public class RecipeController {
 		
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (recipe != null) {
-			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
+			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
 			
 			recipeService.save(recipe);
