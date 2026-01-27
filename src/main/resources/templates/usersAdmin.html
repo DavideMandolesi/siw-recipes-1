@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>SiwRecipes - Amministrazione</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- Icone -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- CSS Globale (Tema) -->
+	<link rel="stylesheet" th:href="@{/theme.css}">
+	<!-- CSS Specifico (Layout) -->
+	<link rel="stylesheet" th:href="@{/adminScreen.css}">
+</head>
+
+
+<body>
+	<div class="app-container">
+
+		<!-- SIDEBAR -->
+		<aside class="sidebar">
+			<div class="brand">
+				<div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+				<h1>SiwRecipes</h1>
+			</div>
+
+			<nav class="sidebar-menu">
+				<div class="menu-section">
+					<span class="menu-label">MENU PRINCIPALE</span>
+					<ul>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
+					</ul>
+				</div>
+
+				<div class="menu-section">
+					<span class="menu-label">LA MIA CUCINA</span>
+					<ul>
+						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
+						<li><a th:href="@{#}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<li><a th:href="@{#}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+					</ul>
+				</div>
+
+				<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
+				<div class="menu-section" th:if="${isAdmin}">
+					<span class="menu-label">AMMINISTRAZIONE</span>
+					<ul>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i>
+								Gestisci Categorie</a></li>
+						<li class="active"><a th:href="@{/admin/userPanel}"><i class="fa-solid fa-users"></i> Gestisci
+								Utenti</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<div class="user-profile">
+				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+						class="user-avatar-sb"></a>
+				<div class="user-info">
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
+					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+				</div>
+
+				<a th:href="@{/logout}" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+			</div>
+		</aside>
+
+
+		<!-- MAIN CONTENT -->
+		<main class="admin-content">
+
+			<header class="admin-header">
+				<div class="header-text">
+					<h2 class="page-title">Gestione Utenti</h2>
+					<p class="page-subtitle">Visualizza e gestisci gli account registrati alla piattaforma.</p>
+				</div>
+				<div class="admin-meta">
+					<span class="admin-badge"><i class="fa-regular fa-circle-check"></i> Admin Mode</span>
+				</div>
+			</header>
+
+			<!-- Layout a Colonna Singola (Full Width) -->
+			<div class="admin-grid-single">
+				<div class="list-header">
+					<h3 th:text="'Elenco Utenti (' + ${#lists.size(userList)} + ')'">Elenco Utenti (0)
+					</h3>
+
+					<!-- Barra di ricerca -->
+					<div class="buttons-group">
+						<form th:action="@{/admin/userPanel}" method="get" class="search-wrapper">
+							<i class="fa-solid fa-magnifying-glass search-icon-admin"></i>
+							<input type="text" th:value="${param.name}" name="name" placeholder="Cerca utente..."
+								class="admin-search-input">
+						</form>
+						<a th:href="@{/admin/userPanel}" class="btn btn-second">Resetta</a>
+					</div>
+				</div>
+
+				<div class="admin-table-container">
+					<table class="admin-table">
+						<thead>
+							<tr>
+								<th class="th-name">Nome</th>
+								<th class="th-surname">Cognome</th>
+								<th class="th-username">Username</th>
+								<th class="th-role">Ruolo</th>
+								<th class="th-status">Stato</th>
+								<th class="th-actions">Azioni</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Riga Utente (Esempio Iterazione) -->
+							<tr th:each="u : ${userList}">
+
+								<td>
+									<div class="user-cell">
+										<img th:src="${u.urlImage} ?: ${defaultProfileUrlImage}" class="table-avatar">
+										<span class="col-primary" th:text="${u.firstName}">Nome</span>
+									</div>
+								</td>
+								<td th:text="${u.lastName}">Cognome</td>
+								<td class="text-muted" th:text="${u.credentials.username}">username</td>
+
+								<td>
+									<span class="role-badge" th:text="${u.credentials.role}">USER</span>
+								</td>
+								<!-- Stato (Logica Badge) -->
+								<td>
+									<span class="status-badge"
+										th:classappend="${u.isBanned} ? 'status-banned' : 'status-active'"
+										th:text="${u.isBanned} ? 'Bannato' : 'Attivo'">Attivo
+									</span>
+								</td>
+
+								<td>
+									<div th:if="${u.credentials.role=='DEFAULT'}">
+										<!-- Mostra bottone Banna se attivo e non ADMIN -->
+										<a th:if="${!u.isBanned}" th:href="@{/admin/banUser/{id}(id=${u.id})}"
+											class="btn-action-text btn-ban">
+											Banna
+										</a>
+
+										<!-- Mostra bottone Riattiva se bannato -->
+										<a th:unless="${!u.isBanned}" th:href="@{/admin/unbanUser/{id}(id=${u.id})}"
+											class="btn-action-text btn-reactivate">
+											Riattiva
+										</a>
+									</div>
+
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+
+		</main>
+	</div>
+</body>

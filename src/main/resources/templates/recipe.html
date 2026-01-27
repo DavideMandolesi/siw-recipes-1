@@ -32,9 +32,8 @@
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
 						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
-						<li class="active"><a th:href="@{#}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
-						<li><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a>
-						</li>
+						<li class="active"><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora
+								Ricette</a></li>
 					</ul>
 				</div>
 
@@ -53,7 +52,7 @@
 					<ul>
 						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci
 								Categorie</a></li>
-						<li><a th:href="@{#}"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+						<li><a th:href="@{/admin/userPanel}"><i class="fa-solid fa-users"></i> Gestisci Utenti</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -143,7 +142,8 @@
 							<div class="review-body" th:text="${r.text}"></div>
 							<div class="review-actions"
 								th:if="${isAdmin or (currentUser != null and currentUser.id == r.author.id)}">
-								<a th:href="@{/editReview/{reviewId}(reviewId=${r.id})}" th:if="${currentUser != null and currentUser.id == r.author.id}">
+								<a th:href="@{/editReview/{reviewId}(reviewId=${r.id})}"
+									th:if="${currentUser != null and currentUser.id == r.author.id}">
 									<button class="review-action-btn action-edit">
 										<i class="fa-solid fa-pen"></i>Modifica
 									</button>
@@ -164,7 +164,8 @@
 					<!-- Bottoni Azione -->
 					<div class="recipe-actions"
 						th:if="${isAdmin or (currentUser != null and currentUser.id == recipe.author.id)}">
-						<a th:href="@{/editRecipe/{id}(id=${recipe.id})}" th:if="${currentUser != null and currentUser.id == recipe.author.id}">
+						<a th:href="@{/editRecipe/{id}(id=${recipe.id})}"
+							th:if="${currentUser != null and currentUser.id == recipe.author.id}">
 							<button class="btn btn-primary" style="flex: 1;">
 								<i class="fa-solid fa-pen"></i> Modifica Ricetta
 							</button>

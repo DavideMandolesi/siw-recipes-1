@@ -1,5 +1,7 @@
 package it.uniroma3.siw.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.Recipe;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -83,6 +86,33 @@ public class UserService {
 		}
 		//se l'utente non è loggato sicurametne non è admin
 		return false;
+	}
+
+	public List<User> getAllUsers() {
+		return (List<User>)userRepository.findAll();
+	}
+	
+	public List<User> searchUsers(String name) {
+		// Se i parametri sono stringhe vuote, li tratto come null	    
+		String searchParam = null;
+	    if (name != null && !name.isBlank()) {
+	        // Prepara la stringa lowercase compatibile alla ricerca parziale: "Pasta" diventa "%pasta%"
+	        searchParam = "%" + name.toLowerCase() + "%";
+	    }
+	    if(name != null && name.isBlank()) {searchParam=null;}
+	    
+		return userRepository.findBySearchParam(searchParam);
+	}
+	
+	public User getUserById(Long id) {
+		return userRepository.findById(id).orElse(null);
+	}
+
+	public void banUser(User user) {
+		user.setIsBanned(true);
+	}
+	public void unbanUser(User user) {
+		user.setIsBanned(false);
 	}
 	
 }

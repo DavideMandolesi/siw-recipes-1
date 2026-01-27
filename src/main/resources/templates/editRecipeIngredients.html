@@ -31,8 +31,8 @@
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
 						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
-						<li class="active"><a th:href="@{#}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
-						<li><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a></li>
+						<li class="active"><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora
+								Ricette</a></li>
 					</ul>
 				</div>
 
@@ -51,7 +51,7 @@
 					<ul>
 						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci
 								Categorie</a></li>
-						<li><a th:href="@{#}"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+						<li><a th:href="@{/admin/userPanel}"><i class="fa-solid fa-users"></i> Gestisci Utenti</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -60,7 +60,8 @@
 				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
 						class="user-avatar-sb"></a>
 				<div class="user-info">
-					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
 					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
 					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
 				</div>

@@ -36,10 +36,9 @@ public class RecipeController {
 	@Autowired
 	CategoryService categoryService;
 
-	
 	/*
 	 * VISUALIZZAZIONE
-	 * */
+	 */
 	@GetMapping("/recipe/{id}")
 	public String getRecipe(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("isLogged", userService.isLogged());
@@ -59,29 +58,32 @@ public class RecipeController {
 
 	@GetMapping("/recipeList")
 	public String getRecipeList(@RequestParam(required = false) String title,
-	        @RequestParam(required = false) Long categoryId,
-	        @RequestParam(required = false) String difficulty,
-	        Model model) {
-		model.addAttribute("isLogged",userService.isLogged());
-		model.addAttribute("isAdmin",userService.isAdmin());
+			@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String difficulty,
+			Model model) {
+		model.addAttribute("isLogged", userService.isLogged());
+		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
 		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
-				
-	    List<Recipe> recipes = recipeService.searchRecipes(title, categoryId, difficulty);
-	    
+
+		List<Recipe> recipes = recipeService.searchRecipes(title, categoryId, difficulty);
+
 		model.addAttribute("queryRecipes", recipes);
-	    model.addAttribute("categories", categoryService.getAllCategories());
-		
+		model.addAttribute("categories", categoryService.getAllCategories());
+
 		return "recipeList";
 	}
-	
-	
+
 	/*
 	 * CREAZIONE RICETTA
-	 * */
+	 */
 	@GetMapping("/formNewRecipe")
 	public String formNewRecipe(@ModelAttribute("recipe") Recipe recipe, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
+
 		/* -- INFO NECESSARIE PER SIDEBAR -- */
 		model.addAttribute("isLogged", userService.isLogged());
 		model.addAttribute("isAdmin", userService.isAdmin());
@@ -103,6 +105,10 @@ public class RecipeController {
 	@Transactional
 	public String confirmNewRecipe(@Valid @ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		if (bindingResult.hasErrors()) {
 			return "formNewRecipe";
 		}
@@ -113,12 +119,15 @@ public class RecipeController {
 		// imposta flag temporaneo=true
 		recipeService.save(recipe);
 
-		return "redirect:/formNewIngredient/"+recipe.getId();
+		return "redirect:/formNewIngredient/" + recipe.getId();
 	}
 
 	@GetMapping("/formNewIngredient/{id}")
-	public String formNewIngredient(@PathVariable("id") Long id,
-			Model model) {
+	public String formNewIngredient(@PathVariable("id") Long id, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		// qui dentro non si può refreshare la pagina altrimenti si perde il riferimento
 		// a recipeId (rimane in sessione solo
 		// per un passaggio visto che è passato da FlashAttribute. Quando model prova
@@ -162,10 +171,13 @@ public class RecipeController {
 	@PostMapping("/confirmNewIngredient/{id}")
 	@Transactional
 	public String confirmNewIngredient(@ModelAttribute("recipe") Recipe recipe, // Recupera dal form
-			@PathVariable("id") Long id,
-			@RequestParam("ingIndex") int index, // Passiamo l'indice
+			@PathVariable("id") Long id, @RequestParam("ingIndex") int index, // Passiamo l'indice
 			RedirectAttributes redirectAttributes, Model model) {
 
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		// questo è l'oggetto con tutte le info tranne l'utlimo ingrediente
 		Recipe recipeDB = recipeService.findRecipeById(id);
 		Ingredient nuovoIng = recipe.getIngredients().get(index);
@@ -174,25 +186,34 @@ public class RecipeController {
 			recipeService.save(recipeDB); // Salva l'aggiunta
 		}
 
-		return "redirect:/formNewIngredient/"+id;
+		return "redirect:/formNewIngredient/" + id;
 	}
 
 	@GetMapping("/confirmRecipe/{id}")
 	@Transactional
 	public String confirmRecipe(@PathVariable("id") Long id) {
+
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		recipeService.findById(id).ifPresent(r -> {
 			recipeService.setActive(r);
 			r.setCreationDate(LocalDate.now(ZoneId.of("GMT")));
 			recipeService.save(r);
 		});
-		return "redirect:/recipe/"+id;
+		return "redirect:/recipe/" + id;
 	}
 
 	/*
 	 * MODIFICA RICETTA
-	 * */
+	 */
 	@GetMapping("/editRecipe/{id}")
 	public String editRecipe(@PathVariable Long id, @ModelAttribute("recipe") Recipe recipe, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		model.addAttribute("isLogged", userService.isLogged());
 		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
@@ -213,19 +234,21 @@ public class RecipeController {
 	@PostMapping("/confirmEditRecipe/{recipeId}")
 	@Transactional
 	public String confirmEditRecipe(@Valid @ModelAttribute("recipe") Recipe recipe,
-			@PathVariable("recipeId") Long recipeId,
-			BindingResult bindingResult/*
-										 * , RedirectAttributes redirectAttributes
-										 */) {
+			@PathVariable("recipeId") Long recipeId, BindingResult bindingResult) {
+
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		if (bindingResult.hasErrors()) {
 			return "redirect:/formEditRecipe/" + recipeId;
 		}
-		
+
 		Recipe recipeDB = recipeService.findRecipeById(recipeId);
-		if(recipeDB!=null) {
+		if (recipeDB != null) {
 			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + recipeId;
-			
+
 			recipeDB.setTitle(recipe.getTitle());
 			recipeDB.setShortDescription(recipe.getShortDescription());
 			recipeDB.setDifficulty(recipe.getDifficulty());
@@ -233,19 +256,23 @@ public class RecipeController {
 			recipeDB.setPrepTime(recipe.getPrepTime());
 			recipeDB.setUrlImage(recipe.getUrlImage());
 			recipeDB.setInstructions(recipe.getInstructions());
-			
+
 			recipeDB.setCreationDate(LocalDate.now(ZoneId.of("GMT")));
 
 			recipeService.save(recipeDB);
-			
+
 			return "redirect:/editRecipeIngredients/" + recipeId;
 		}
-		
+
 		return "redirect:/";
 	}
 
 	@GetMapping("/editRecipeIngredients/{id}")
 	public String editRecipeIngredients(@PathVariable("id") Long id, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		model.addAttribute("isLogged", userService.isLogged());
 		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
@@ -262,86 +289,99 @@ public class RecipeController {
 		}
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/removeRecipeIngredient/{id}/{index}")
 	@Transactional
 	public String removeRecipeIngredient(@PathVariable("id") Long id, @PathVariable("index") int index, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		model.addAttribute("isLogged", userService.isLogged());
 		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
 		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		Recipe recipe = recipeService.findRecipeById(id);
-		
+
 		if (recipe != null) {
 			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
-			
+
 			recipe.getIngredients().remove(index);
 			recipeService.save(recipe);
-			
+
 			model.addAttribute(recipe);
 			model.addAttribute("ingIndex", recipeService.getLastEmptyIngredientIndex(recipe));
-			return "redirect:/editRecipeIngredients/"+id;
+			return "redirect:/editRecipeIngredients/" + id;
 		}
 		return "redirect:/";
 	}
-	
+
 	@PostMapping("/confirmNewIngredientEdit/{id}")
 	@Transactional
-	public String confirmNewIngredientEdit(@PathVariable("id") Long id, 
-			@RequestParam("ingIndex") int index, 
-			@ModelAttribute("recipe") Recipe recipe, 
-			Model model) {
-		
+	public String confirmNewIngredientEdit(@PathVariable("id") Long id, @RequestParam("ingIndex") int index,
+			@ModelAttribute("recipe") Recipe recipe, Model model) {
+
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		Recipe recipeDB = recipeService.findRecipeById(id);
-		
+
 		if (recipeDB != null) {
 			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
-			
+
 			Ingredient nuovoIng = recipe.getIngredients().get(index);
 			if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
 				recipeDB.getIngredients().add(nuovoIng);
-				
-				//rimuovi tutti gli ingredienti vuoti prima di salvare
+
+				// rimuovi tutti gli ingredienti vuoti prima di salvare
 				recipeDB = recipeService.removeEmptyIngredients(recipeDB);
-				
+
 				recipeService.save(recipeDB); // Salva l'aggiunta
-				return"redirect:/editRecipeIngredients/"+id;
+				return "redirect:/editRecipeIngredients/" + id;
 			}
-		}	
-		
+		}
+
 		return "redirect:/";
 	}
 
 	@GetMapping("/confirmRecipeEditUltimated/{id}")
 	@Transactional
 	public String confirmRecipeEditUltimated(@PathVariable("id") Long id) {
-		
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
+
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (recipe != null) {
 			if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId()))
 				return "redirect:/recipe/" + id;
-			
+
 			recipeService.save(recipe);
-			return "redirect:/recipe/"+id;
+			return "redirect:/recipe/" + id;
 		}
 		return "redirect:/";
 	}
-	
+
 	/*
 	 * ELIMINAZIONE RICETTA
-	 * */
-	
+	 */
+
 	@GetMapping("/deleteRecipe/{id}")
-	public String deleteRecipe(@PathVariable("id")Long id,
-			Model model) {
+	public String deleteRecipe(@PathVariable("id") Long id, Model model) {
+		// currentUser!= null perché auth permette solo gli autenticati
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (!(recipe.getAuthor().getId() == userService.getCurrentUser().getId() || userService.isAdmin()))
 			return "redirect:/";
 		recipeService.delete(recipe);
 		return "redirect:/";
 	}
-	
+
 }

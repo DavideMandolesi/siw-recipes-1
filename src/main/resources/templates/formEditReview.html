@@ -30,7 +30,6 @@
 					<ul>
 						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
 						<li><a th:href="@{#}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
-						<li class="active"><a th:href="@{#}"><i class="fa-solid fa-star"></i> Esplora Recensioni</a></li>
 					</ul>
 				</div>
 
@@ -49,7 +48,7 @@
 					<ul>
 						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci
 								Categorie</a></li>
-						<li><a th:href="@{#}"><i class="fa-solid fa-users"></i> Gestione Utenti</a></li>
+						<li><a th:href="@{/admin/userPanel}"><i class="fa-solid fa-users"></i> Gestisci Utenti</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -58,7 +57,8 @@
 				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
 						class="user-avatar-sb"></a>
 				<div class="user-info">
-					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"}></span></a>
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
 					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
 					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
 				</div>
@@ -77,7 +77,7 @@
 				<aside class="recipe-preview-column">
 					<article class="recipe-preview-card">
 						<div class="preview-image">
-							<img  th:src="${recipe.urlImage} ?: ${defaultRecipeUrlImage}">
+							<img th:src="${recipe.urlImage} ?: ${defaultRecipeUrlImage}">
 						</div>
 						<div class="preview-body">
 							<h3 class="preview-title" th:text="${recipe.title}"></h3>
@@ -97,10 +97,12 @@
 
 						<div class="form-header-simple">
 							<h2>Modifica la tua recensione</h2>
-							<p>Condividi la tua esperienza con questa ricetta. Le recensioni aiutano gli altri utenti.</p>
+							<p>Condividi la tua esperienza con questa ricetta. Le recensioni aiutano gli altri utenti.
+							</p>
 						</div>
 
-						<form th:action="@{/confirmReviewEdit/{reviewId}(reviewId=${review.id})}" method="POST" th:object="${review}">
+						<form th:action="@{/confirmReviewEdit/{reviewId}(reviewId=${review.id})}" method="POST"
+							th:object="${review}">
 							<!-- Rating System (Input Radio Nascosti) -->
 							<div class="form-group">
 								<label class="label">Valutazione</label>
