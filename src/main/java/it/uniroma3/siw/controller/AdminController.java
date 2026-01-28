@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import it.uniroma3.siw.model.Category;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CategoryService;
+import it.uniroma3.siw.service.RecipeService;
 import it.uniroma3.siw.service.UserService;
 import jakarta.transaction.Transactional;
 
@@ -22,6 +23,8 @@ public class AdminController {
 	UserService userService;
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	RecipeService recipeService;
 
 	@GetMapping("/admin/categoryPanel")
 	public String categoryPanel(Model model) {
@@ -35,6 +38,7 @@ public class AdminController {
 		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
 		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		model.addAttribute("defaultCategoryName", Category.DEFAULT_CAT_NAME);
 
 		model.addAttribute("categoryList", categoryService.getAllCategories());
 		model.addAttribute("category", new Category());
@@ -60,7 +64,8 @@ public class AdminController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-
+		if(categoryService.findCategoryById(id).getName().equals(Category.DEFAULT_CAT_NAME)) {/*errore impossibile modificare la cateogria di default*/}
+		
 		model.addAttribute("isLogged", userService.isLogged());
 		model.addAttribute("isAdmin", userService.isAdmin());
 		model.addAttribute("currentUser", userService.getCurrentUser());
@@ -79,6 +84,7 @@ public class AdminController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
+		if(category.getName().equals(Category.DEFAULT_CAT_NAME)) {/*errore impossibile modificare la cateogria di default*/}
 
 		// aggiungi controllo errori hasErrors()
 		categoryService.save(category);
@@ -86,14 +92,15 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin/deleteCategory/{id}")
+	@Transactional
 	public String deleteCategory(@PathVariable("id") Long id) {
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-
-		categoryService.deleteCategoryById(id);
-
+		
+		categoryService.deleteCategory(id);
+		
 		return "redirect:/admin/categoryPanel";
 	}
 

@@ -102,7 +102,7 @@
 									<td class="col-primary" th:text="${c.name}"></td>
 									<td th:text="${c.description}"></td>
 									<td>
-										<div class="action-buttons">
+										<div class="action-buttons"  th:unless="${c.name==defaultCategoryName}">
 											<a th:href="@{/admin/editCategory/{id}(id=${c.id})}"><button
 													class="btn-icon btn-edit" title="Modifica">
 													<i class="fa-solid fa-pen"></i>

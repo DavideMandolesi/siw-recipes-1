@@ -51,10 +51,12 @@ public class ReviewController {
 	@PostMapping("/confirmReviewCreation/{recipeId}")
 	public String confirmReviewCreation(@ModelAttribute("review") Review review,
 			@PathVariable("recipeId") Long recipeId, Model model) {
+		
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
+		
 		Recipe recipe = recipeService.findRecipeById(recipeId);
 
 		if (review != null && recipe != null) {

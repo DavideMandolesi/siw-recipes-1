@@ -12,6 +12,8 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category {
+	public final static String DEFAULT_CAT_NAME = "Altro";
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
