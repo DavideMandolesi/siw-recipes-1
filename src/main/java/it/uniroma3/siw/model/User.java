@@ -116,5 +116,14 @@ public class User {
 	
 	public void setCredentials(Credentials credentials) {
 		this.credentials = credentials;
-	}	
+	}
+
+	public List<Recipe> getRecipes() {
+		return recipes;
+	}
+
+	public void setRecipes(List<Recipe> recipes) {
+		this.recipes = recipes;
+	}
+	
 }

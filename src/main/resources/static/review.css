@@ -279,14 +279,169 @@
 	margin-top: 6px;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-	.review-page-grid {
-		grid-template-columns: 1fr;
-	}
 
-	.recipe-preview-column {
-		order: -1;
-		/* Su mobile l'anteprima sta sopra o si può nascondere */
-	}
+/* --- STILI PER PAGINA "LE MIE RECENSIONI" --- */
+
+.my-reviews-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 40px;
+}
+
+.no-data-message {
+    text-align: center;
+    color: var(--text-gray);
+    padding: 40px;
+    background: white;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+/* Card Orizzontale Wrapper */
+.my-review-card {
+    display: flex;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: box-shadow 0.2s;
+}
+
+.my-review-card:hover {
+    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
+}
+
+/* --- Colonna Sinistra (Ricetta) --- */
+.review-recipe-col {
+    width: 300px; /* Larghezza fissa per la colonna ricetta */
+    min-width: 300px;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-recipe-image {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+}
+
+.mini-recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.mini-recipe-image:hover img {
+    transform: scale(1.05);
+}
+
+.mini-recipe-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.recipe-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.mini-recipe-title {
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.recipe-link:hover .mini-recipe-title {
+    color: var(--primary-color);
+}
+
+.mini-recipe-desc {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-bottom: 16px;
+    line-height: 1.4;
+    
+    /* Tronca dopo 3 righe */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mini-recipe-author {
+    margin-top: auto; /* Spinge l'autore in fondo */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.avatar-xs {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* --- Colonna Destra (Contenuto Recensione) --- */
+.review-content-col {
+    flex-grow: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Spinge le azioni in fondo */
+}
+
+/* Riutilizziamo classi esistenti ma adattiamo se necessario */
+.review-content-col .review-body {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.review-content-col .review-actions {
+    margin-top: auto;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 16px;
+}
+
+/* Responsive: Su mobile diventa verticale */
+@media (max-width: 900px) {
+    .my-review-card {
+        flex-direction: column;
+    }
+    
+    .review-recipe-col {
+        width: 100%;
+        min-width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: row; /* Immagine a sx, testo a dx su mobile */
+    }
+
+    .mini-recipe-image {
+        width: 120px;
+        height: auto;
+    }
+	.review-page-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.recipe-preview-column {
+			order: -1;
+			/* Su mobile l'anteprima sta sopra o si può nascondere */
+		}
 }

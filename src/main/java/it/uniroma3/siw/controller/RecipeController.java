@@ -73,6 +73,24 @@ public class RecipeController {
 
 		return "recipeList";
 	}
+	
+	@GetMapping("/myRecipeList")
+	public String getMyRecipeList(/*@RequestParam(required = false) String title,
+			@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String difficulty,*/
+			Model model) {
+		model.addAttribute("isLogged", userService.isLogged());
+		model.addAttribute("isAdmin", userService.isAdmin());
+		model.addAttribute("currentUser", userService.getCurrentUser());
+		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
+
+		// AuthConfiguration garantisce che currentUser !=null
+		List<Recipe> recipes = userService.getCurrentUser().getRecipes();
+
+		model.addAttribute("recipes", recipes);
+
+		return "myRecipeList";
+	}
 
 	/*
 	 * CREAZIONE RICETTA

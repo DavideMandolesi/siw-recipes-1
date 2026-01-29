@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>SiwRecipes - Le Mie Recensioni</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- Icone -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- CSS Globale (Tema) -->
+	<link rel="stylesheet" th:href="@{/theme.css}">
+	<!-- CSS Specifico (Layout) -->
+	<link rel="stylesheet" th:href="@{/homeLayout.css}">
+	<link rel="stylesheet" th:href="@{/review.css}">
+</head>
+
+
+<body>
+	<div class="app-container">
+
+		<!-- SIDEBAR -->
+		<aside class="sidebar">
+			<div class="brand">
+				<div class="logo-icon"><i class="fa-solid fa-bread-slice"></i></div>
+				<h1>SiwRecipes</h1>
+			</div>
+
+			<nav class="sidebar-menu">
+				<div class="menu-section">
+					<span class="menu-label">MENU PRINCIPALE</span>
+					<ul>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
+					</ul>
+				</div>
+
+				<div class="menu-section">
+					<span class="menu-label">LA MIA CUCINA</span>
+					<ul>
+						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
+						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<li class="active"><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie
+								Recensioni</a></li>
+					</ul>
+				</div>
+
+				<!-- Mostra SOLO se autenticato come AMMINISTRATORE-->
+				<div class="menu-section" th:if="${isAdmin}">
+					<span class="menu-label">AMMINISTRAZIONE</span>
+					<ul>
+						<li><a th:href="@{/admin/categoryPanel}"><i class="fa-solid fa-tags"></i> Gestisci
+								Categorie</a></li>
+						<li><a th:href="@{/admin/userPanel}"><i class="fa-solid fa-users"></i> Gestisci Utenti</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<div class="user-profile">
+				<a th:href="@{/profile}"><img th:src="${currentUser?.urlImage} ?: ${defaultProfileUrlImage}"
+						class="user-avatar-sb"></a>
+				<div class="user-info">
+					<a th:href="@{/profile}"><span class="user-name" th:text="${currentUser?.firstName} ?: 'Accedi'"
+							}></span></a>
+					<a th:href="@{/profile}" class="user-role" th:if="${isAdmin}">Admin</a>
+					<a th:href="@{/profile}" class="user-role" th:unless="${isAdmin}">Visualizza profilo</a>
+				</div>
+
+				<a th:href="@{/logout}" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+			</div>
+		</aside>
+
+		<!-- MAIN CONTENT -->
+		<main class="main-content">
+
+			<!-- TOP BAR -->
+			<header class="top-bar">
+				<div class="titles">
+					<h2>Le Mie Recensioni</h2>
+					<p class="subtitle">Tutte le tue recensioni in un posto solo.</p>
+				</div>
+			</header>
+
+
+			<div class="my-reviews-container">
+
+				<div th:if="${reviews == null or reviews.isEmpty()}" class="no-data-message">
+					<p>Non hai ancora scritto nessuna recensione.</p>
+				</div>
+
+				<article class="my-review-card" th:each="review : ${reviews}">
+
+					<!-- SINISTRA -->
+					<div class="review-recipe-col">
+						<div class="mini-recipe-image">
+							<a th:href="@{/recipe/{id}(id=${review.recipe.id})}">
+								<img th:src="${review.recipe.urlImage} ?: ${defaultRecipeUrlImage}">
+							</a>
+						</div>
+						<div class="mini-recipe-body">
+							<a th:href="@{/recipe/{id}(id=${review.recipe.id})}" class="recipe-link">
+								<h3 class="mini-recipe-title" th:text="${review.recipe.title}">Titolo Ricetta</h3>
+							</a>
+							<p class="mini-recipe-desc" th:text="${review.recipe.shortDescription}">Descrizione breve...
+							</p>
+
+							<div class="mini-recipe-author">
+								<img th:src="${review.recipe.author.urlImage} ?: ${defaultProfileUrlImage}"
+									class="avatar-sm">
+								<span th:text="${review.recipe.author.credentials.username}">Chef Name</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- DESTRA -->
+					<div class="review-content-col">
+						<div class="review-header">
+							<div class="reviewer-info">
+								<img th:src="${currentUser.urlImage} ?: ${defaultProfileUrlImage}" class="avatar">
+								<div>
+									<span class="reviewer-name">Tu</span>
+									<span class="review-date"
+										th:text="${#temporals.format(review.creationDate, 'dd MMMM yyyy')}">Data</span>
+								</div>
+							</div>
+							<div class="review-stars">
+								<i th:each="num : ${#numbers.sequence(1, 5)}"
+									th:class="${num <= review.rating} ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
+							</div>
+						</div>
+
+						<div class="review-body" th:text="${review.text}">
+							Testo della recensione...
+						</div>
+
+						<!-- mantengo i controlli ma potrei non farlo, tanto si tratta dell'utente corrente -->
+						<div class="review-actions">
+							<a th:href="@{/editReview/{id}(id=${review.id})}">
+								<button class="review-action-btn action-edit">
+									<i class="fa-solid fa-pen"></i> Modifica
+								</button>
+							</a>
+							<a th:href="@{/deleteReview/{id}(id=${review.id})}">
+								<button class="review-action-btn action-delete">
+									<i class="fa-regular fa-trash-can"></i> Elimina
+								</button>
+							</a>
+						</div>
+					</div>
+
+				</article>
+
+			</div>
+		</main>
+	</div>
+</body>

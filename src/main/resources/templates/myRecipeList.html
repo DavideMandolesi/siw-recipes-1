@@ -3,14 +3,15 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>SiwRecipes - Profilo</title>
+	<title>SiwRecipes - Le mie Ricette</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<!-- Icone -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 	<!-- CSS Globale (Tema) -->
 	<link rel="stylesheet" th:href="@{/theme.css}">
-	<!-- CSS Specifico (Layout) -->
+
 	<link rel="stylesheet" th:href="@{/homeLayout.css}">
+	<link rel="stylesheet" th:href="@{/recipe.css}">
 </head>
 
 
@@ -28,7 +29,7 @@
 				<div class="menu-section">
 					<span class="menu-label">MENU PRINCIPALE</span>
 					<ul>
-						<li class="active"><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
+						<li><a th:href="@{/}"><i class="fa-solid fa-house"></i> Home</a></li>
 						<li><a th:href="@{/recipeList}"><i class="fa-solid fa-utensils"></i> Esplora Ricette</a></li>
 					</ul>
 				</div>
@@ -37,7 +38,7 @@
 					<span class="menu-label">LA MIA CUCINA</span>
 					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
-						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
+						<li class="active"><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
 						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
 					</ul>
 				</div>
@@ -70,7 +71,59 @@
 		<!-- MAIN CONTENT -->
 		<main class="main-content">
 
+			<!-- TOP BAR -->
+			<header class="top-bar">
+				<div class="titles">
+					<h2>Le Mie Ricette</h2>
+					<p class="subtitle">Esplora le preziose creazioni della tua cucina.</p>
+				</div>
 
+				<div class="button-container">
+					<a th:href="@{/formNewRecipe}">
+						<button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nuova Ricetta</button>
+					</a>
+				</div>
+
+			</header>
+
+
+			<!-- RECIPE GRID -->
+			<section class="recipe-grid">
+
+				<div th:if="${recipes == null or recipes.isEmpty()}" class="no-recipes-message">
+					<p>Al momento non hai ancora condiviso alcuna ricetta! Inizia subito premendo il bottone "Nuova Ricetta" in alto</p>
+				</div>
+
+				<!-- Card Ricette -->
+				<article class="card" th:each="recipe : ${recipes}" th:unless="${recipes.isEmpty()}">
+					<div class="card-image">
+						<a th:href="@{/recipe/{id}(id=${recipe.id})}" }>
+							<img th:src="${recipe.urlImage} ?: ${defaultRecipeUrlImage}">
+						</a>
+						<span class="time-badge" th:text="${recipe.prepTime} +' min'"><i
+								class="fa-regular fa-clock"></i></span>
+					</div>
+					<div class="card-body">
+						<div class="card-meta">
+							<span class="badge badge-yellow" th:text="${recipe.category?.name}"></span>
+						</div>
+						<a th:href="@{/recipe/{id}(id=${recipe.id})}" }>
+							<h3 class="card-title" th:text="${recipe.title}"></h3>
+						</a>
+						<p class="card-desc" th:text="${recipe.shortDescription}"></p>
+					</div>
+					<div class="card-footer">
+						<a> <!-- AGGIUNGERE REINDIRIZZAMENTO PROFILO UTENTE DELL'AUTORE -->
+							<div class="author">
+								<img th:src="${recipe.author?.urlImage} ?: ${defaultProfileUrlImage}">
+								<span th:text="${recipe.author?.credentials.username} ?: 'Autore Anonimo'"></span>
+							</div>
+						</a>
+						<span class="difficulty" th:text="${recipe.difficulty}"></span>
+					</div>
+				</article>
+
+			</section>
 		</main>
 	</div>
 </body>

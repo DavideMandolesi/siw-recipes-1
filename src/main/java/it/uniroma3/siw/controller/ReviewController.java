@@ -27,6 +27,19 @@ public class ReviewController {
 	@Autowired
 	ReviewService reviewService;
 
+	@GetMapping("/myReviewList")
+	public String myReviewList(Model model) {
+		model.addAttribute("isLogged", userService.isLogged());
+		model.addAttribute("isAdmin", userService.isAdmin());
+		model.addAttribute("currentUser", userService.getCurrentUser());
+		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
+		
+		model.addAttribute("reviews",reviewService.getMyReviews());
+		
+		return "myReviewList";
+	}
+	
 	@GetMapping("/formNewReview/{id}")
 	public String formNewReview(@PathVariable("id") Long id, Model model) {
 		// currentUser!= null perché auth permette solo gli autenticati
