@@ -38,7 +38,8 @@
 					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
 						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a>
+						</li>
 					</ul>
 				</div>
 
@@ -102,7 +103,7 @@
 									<td class="col-primary" th:text="${c.name}"></td>
 									<td th:text="${c.description}"></td>
 									<td>
-										<div class="action-buttons"  th:unless="${c.name==defaultCategoryName}">
+										<div class="action-buttons" th:unless="${c.name==defaultCategoryName}">
 											<a th:href="@{/admin/editCategory/{id}(id=${c.id})}"><button
 													class="btn-icon btn-edit" title="Modifica">
 													<i class="fa-solid fa-pen"></i>
@@ -130,6 +131,17 @@
 						<p class="form-desc">Inserisci i dettagli per creare una nuova classificazione.</p>
 
 						<form th:action="@{/admin/confirmNewCategory}" method="POST" th:object="${category}">
+							<!-- Box messaggi errore validazione -->
+							<div class="alert-error" th:if="${#fields.hasAnyErrors()}">
+								<i class="fa-solid fa-circle-exclamation alert-icon"></i>
+								<div class="alert-content">
+									<h4>Errore nella compilazione</h4>
+									<ul>
+										<li th:each="err : ${#fields.allErrors()}" th:text="${err}">Errore nel form</li>
+									</ul>
+								</div>
+							</div>
+
 							<label class="label">Nome Categoria</label>
 							<input type="text" class="admin-input" placeholder="Es. Antipasti" required
 								th:field="${category.name}">

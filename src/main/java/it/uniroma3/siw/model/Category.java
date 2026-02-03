@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Category {
@@ -18,9 +20,12 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+	@NotBlank(message = "{NotBlank.category.name}")
     @Column(unique = true, nullable = false)
     private String name;
     
+	@NotBlank(message = "{NotBlank.category.description}")
+	@Size(min = 1, max = 255, message = "{Size.category.description}")
     @Column(nullable = false)
     private String description;
 

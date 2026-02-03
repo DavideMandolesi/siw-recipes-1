@@ -355,6 +355,31 @@ ul {
     color: var(--primary-color);
 }
 
+/* Alert Box */
+.alert-error {
+    background-color: var(--color-red-bg);
+    color: var(--color-red-text);
+    border: 1px solid #FECACA;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.alert-icon {
+    font-size: 1.2rem;
+}
+
+.alert-content h4 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.alert-content p {
+    font-size: 0.9rem;
+}
 
 
 /* --- RESPONSIVE --- */

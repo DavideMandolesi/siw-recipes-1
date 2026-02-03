@@ -14,6 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Recipe {
@@ -23,19 +26,36 @@ public class Recipe {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank(message="{NotBlank.recipe.title}")
 	@Column(nullable = false)
 	private String title;
+	
+	@NotBlank(message="{NotBlank.recipe.shortDescription}")
+	@Size(min = 1, max = 255, message = "{Size.recipe.shortDescription}")
 	@Column(nullable = false)
 	private String shortDescription;
+	
+	@NotBlank(message="{NotBlank.recipe.instructions}")
+	@Size(min = 1, max = 10000, message = "{Size.recipe.instructions}")
 	@Column (length = 10000, nullable = false)
 	private String instructions;
+	
+	@Positive(message = "{Positive.recipe.prepTime}")
 	@Column(nullable = false)
 	private int prepTime;
+	
+	@NotBlank(message="{NotBlank.recipe.difficulty}")
+	@Size(min = 1, max = 255, message = "{Size.recipe.difficulty}")
 	@Column(nullable = false)
 	private String difficulty;
+	
 	private LocalDate creationDate;
+	
+	@Size(min = 1, max = 255, message = "{Size.recipe.urlImage}")
 	private String urlImage;
+	
 	private Boolean isActive=false;
+	
 	@ElementCollection
 	private List<Ingredient> ingredients=new ArrayList<>();
 	

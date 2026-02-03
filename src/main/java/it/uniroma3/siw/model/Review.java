@@ -9,14 +9,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@NotBlank(message="{NotBlank.review.text}")
+	@Size(min = 1, max = 5000, message = "{Size.review.text}")
 	@Column(length = 5000, nullable = false)
 	private String text;
+	
+	@Min(value=0, message="{Min.review.rating}")
+	@Max(value=5, message="{Max.review.rating}")
 	@Column(nullable = false)
 	private int rating;
 	private LocalDate creationDate;

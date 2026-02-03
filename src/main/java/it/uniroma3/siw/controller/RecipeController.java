@@ -41,11 +41,6 @@ public class RecipeController {
 	 */
 	@GetMapping("/recipe/{id}")
 	public String getRecipe(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
 
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (recipe != null) {
@@ -60,11 +55,6 @@ public class RecipeController {
 	public String getRecipeList(@RequestParam(required = false) String title,
 			@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String difficulty,
 			Model model) {
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
 
 		List<Recipe> recipes = recipeService.searchRecipes(title, categoryId, difficulty);
 
@@ -78,11 +68,6 @@ public class RecipeController {
 	public String getMyRecipeList(/*@RequestParam(required = false) String title,
 			@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String difficulty,*/
 			Model model) {
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
 
 		// AuthConfiguration garantisce che currentUser !=null
 		List<Recipe> recipes = userService.getCurrentUser().getRecipes();
@@ -101,12 +86,6 @@ public class RecipeController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-
-		/* -- INFO NECESSARIE PER SIDEBAR -- */
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		model.addAttribute("categoryList", categoryService.getAllCategories());
 
@@ -128,6 +107,7 @@ public class RecipeController {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
+			//sistema verifica errore
 			return "formNewRecipe";
 		}
 
@@ -146,36 +126,17 @@ public class RecipeController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		// qui dentro non si può refreshare la pagina altrimenti si perde il riferimento
-		// a recipeId (rimane in sessione solo
-		// per un passaggio visto che è passato da FlashAttribute. Quando model prova
-		// ricostruirlo non trova il costruttore Long
-
-		/* -- INFO NECESSARIE PER SIDEBAR -- */
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-
 		// Se l'ID non è stato passato (es. accesso diretto all'URL), reindirizza alla
 		// creazione
 		if (id == null) {
-			// String errorMsg = messageSource.getMessage("error.recipe.null_or_invalid_id",
-			// null, LocaleContextHolder.getLocale());
-			// model.addAttribute("errorMessage", errorMsg);
-			// attenzione, questo tipo di messaggio non viene mostrato nella pagina
-			// formNewRecipe.html, per farlo aggiungi visualizzazione
+			
 			return "redirect:/formNewRecipe";
 		}
 
 		Optional<Recipe> recipe = recipeService.findById(id);
 		// non è stato trovato alcuna ricetta con quell'id
 		if (recipe.isEmpty()) {
-			// String errorMsg = messageSource.getMessage("error.recipe.null_or_invalid_id",
-			// null, LocaleContextHolder.getLocale());
-			// model.addAttribute("errorMessage", errorMsg);
-			// attenzione, questo tipo di messaggio non viene mostrato nella pagina
-			// formNewRecipe.html, per farlo aggiungi visualizzazione
+			
 			return "redirect:/formNewRecipe";
 		}
 
@@ -232,10 +193,6 @@ public class RecipeController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		model.addAttribute("categoryList", categoryService.getAllCategories());
 		Recipe r = recipeService.findRecipeById(id);
@@ -291,10 +248,6 @@ public class RecipeController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		Recipe recipe = recipeService.findRecipeById(id);
 
@@ -315,10 +268,6 @@ public class RecipeController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		Recipe recipe = recipeService.findRecipeById(id);
 

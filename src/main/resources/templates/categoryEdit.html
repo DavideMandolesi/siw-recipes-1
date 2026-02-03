@@ -38,7 +38,8 @@
 					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
 						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a>
+						</li>
 					</ul>
 				</div>
 
@@ -83,6 +84,19 @@
 
 			<!-- Form di Modifica -->
 			<form th:action="@{/admin/categoryUpdate/{id}(id=${category.id})}" method="POST" th:object="${category}" }>
+
+
+				<!-- Box messaggi errore validazione -->
+				<div class="alert-error" th:if="${#fields.hasAnyErrors()}">
+					<i class="fa-solid fa-circle-exclamation alert-icon"></i>
+					<div class="alert-content">
+						<h4>Errore nella compilazione</h4>
+						<ul>
+							<li th:each="err : ${#fields.allErrors()}" th:text="${err}">Errore nel form</li>
+						</ul>
+					</div>
+				</div>
+
 
 				<!-- Input nascosto per l'ID della categoria -->
 				<input type="hidden" th:field="${category.id}">

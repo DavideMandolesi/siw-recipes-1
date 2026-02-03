@@ -1,6 +1,8 @@
 package it.uniroma3.siw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,11 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.siw.model.Category;
+import it.uniroma3.siw.model.Credentials;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CategoryService;
 import it.uniroma3.siw.service.RecipeService;
 import it.uniroma3.siw.service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Controller
 public class AdminController {
@@ -25,6 +29,7 @@ public class AdminController {
 	CategoryService categoryService;
 	@Autowired
 	RecipeService recipeService;
+	@Autowired MessageSource messageSource;
 
 	@GetMapping("/admin/categoryPanel")
 	public String categoryPanel(Model model) {
@@ -34,10 +39,6 @@ public class AdminController {
 			return "redirect:/";
 		}
 
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 		model.addAttribute("defaultCategoryName", Category.DEFAULT_CAT_NAME);
 
 		model.addAttribute("categoryList", categoryService.getAllCategories());
@@ -48,13 +49,18 @@ public class AdminController {
 
 	@PostMapping("/admin/confirmNewCategory")
 	@Transactional
-	public String confirmNewCategory(@ModelAttribute("Category") Category category) {
+	public String confirmNewCategory(@Valid @ModelAttribute("category") Category category, BindingResult bindingResult, Model model) {
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		if (category != null)
-			categoryService.save(category);
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("defaultCategoryName", Category.DEFAULT_CAT_NAME);
+			model.addAttribute("categoryList", categoryService.getAllCategories());
+			return "categoryAdmin";
+		}
+		categoryService.save(category);
 		return "redirect:/admin/categoryPanel";
 	}
 
@@ -64,12 +70,9 @@ public class AdminController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		if(categoryService.findCategoryById(id).getName().equals(Category.DEFAULT_CAT_NAME)) {/*errore impossibile modificare la cateogria di default*/}
-		
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
+		if(categoryService.findCategoryById(id).getName().equals(Category.DEFAULT_CAT_NAME)) {
+			return "redirect:/admin/categoryPanel";
+		}
 
 		model.addAttribute("category", categoryService.findCategoryById(id));
 
@@ -78,13 +81,21 @@ public class AdminController {
 
 	@PostMapping("/admin/categoryUpdate/{id}")
 	@Transactional
-	public String updateCategory(@PathVariable("id") Long id, @ModelAttribute("category") Category category,
-			BindingResult result) {
+	public String updateCategory(@PathVariable("id") Long id, @Valid @ModelAttribute("category") Category category,
+			BindingResult bindingResult, Model model) {
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		if(category.getName().equals(Category.DEFAULT_CAT_NAME)) {/*errore impossibile modificare la cateogria di default*/}
+		if(category.getName().equals(Category.DEFAULT_CAT_NAME)) {
+			/*errore impossibile modificare la cateogria di default*/
+			String errorMsg = messageSource.getMessage("error.category.editingDefaultCategory", null, LocaleContextHolder.getLocale());
+			bindingResult.rejectValue("name", errorMsg);
+			return "categoryEdit";
+		}
+		if(bindingResult.hasErrors()) {
+			return "categoryEdit";
+		}
 
 		// aggiungi controllo errori hasErrors()
 		categoryService.save(category);
@@ -110,10 +121,6 @@ public class AdminController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 
 		model.addAttribute("userList", userService.searchUsers(name));
 
@@ -128,7 +135,7 @@ public class AdminController {
 			return "redirect:/";
 		}
 		User user = userService.getUserById(id);
-		if (user.getCredentials().getRole().equals(User.DEFAULT_URL_PROFILE_PIC))
+		if (user.getCredentials().getRole().equals(Credentials.DEFAULT_ROLE))
 			return "redirect:/admin/userPanel";
 		userService.banUser(user);
 		userService.save(user);
@@ -143,7 +150,7 @@ public class AdminController {
 			return "redirect:/";
 		}
 		User user = userService.getUserById(id);
-		if (user.getCredentials().getRole().equals(User.DEFAULT_URL_PROFILE_PIC))
+		if (user.getCredentials().getRole().equals(Credentials.DEFAULT_ROLE))
 			return "redirect:/admin/userPanel";
 		userService.unbanUser(user);
 		userService.save(user);

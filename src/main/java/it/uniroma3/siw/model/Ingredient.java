@@ -2,12 +2,19 @@ package it.uniroma3.siw.model;
 
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @Embeddable
 public class Ingredient {
 	
+	@NotBlank(message="{NotBlank.ingredient.name}")
 	private String name;
+	
+	@Positive(message = "{Positive.ingredient.quantity}")
 	private float quantity;
+	
+	@NotBlank(message="{NotBlank.ingredient.unit}")
 	private String unit;
 	
 	public Ingredient() {}

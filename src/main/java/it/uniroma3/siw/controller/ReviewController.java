@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.RecipeService;
 import it.uniroma3.siw.service.ReviewService;
 import it.uniroma3.siw.service.UserService;
+import jakarta.validation.Valid;
 
 @Controller
 public class ReviewController {
@@ -29,12 +31,6 @@ public class ReviewController {
 
 	@GetMapping("/myReviewList")
 	public String myReviewList(Model model) {
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
-		
 		model.addAttribute("reviews",reviewService.getMyReviews());
 		
 		return "myReviewList";
@@ -46,11 +42,6 @@ public class ReviewController {
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
-		model.addAttribute("isLogged", userService.isLogged());
-		model.addAttribute("isAdmin", userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-		model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
 
 		Recipe recipe = recipeService.findRecipeById(id);
 		if (recipe != null) {
@@ -62,12 +53,21 @@ public class ReviewController {
 	}
 
 	@PostMapping("/confirmReviewCreation/{recipeId}")
-	public String confirmReviewCreation(@ModelAttribute("review") Review review,
+	public String confirmReviewCreation(@Valid @ModelAttribute("review") Review review,
+			BindingResult bindingResult,
 			@PathVariable("recipeId") Long recipeId, Model model) {
 		
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
+		}
+		
+		if(bindingResult.hasErrors()) {
+			//non posso fare redirect altrimenti perdo i binding results
+			Recipe recipe = recipeService.findRecipeById(recipeId);
+	        model.addAttribute("recipe", recipe);
+	        
+	        return "formNewReview";
 		}
 		
 		Recipe recipe = recipeService.findRecipeById(recipeId);
@@ -94,11 +94,6 @@ public class ReviewController {
 		if (review != null) {
 			if (!(userService.getCurrentUser().getId() == review.getAuthor().getId() || userService.isAdmin()))
 				return "redirect:/recipe/" + review.getRecipe().getId();
-			model.addAttribute("isLogged", userService.isLogged());
-			model.addAttribute("isAdmin", userService.isAdmin());
-			model.addAttribute("currentUser", userService.getCurrentUser());
-			model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
-			model.addAttribute("defaultRecipeUrlImage", Recipe.DEFAULT_URL_RECIPE_IMG_);
 
 			model.addAttribute("review", review);
 			model.addAttribute("recipe", review.getRecipe());

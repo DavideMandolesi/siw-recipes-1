@@ -47,7 +47,7 @@ public class UserController {
 		if(!confirmPassword.equals(credentials.getPassword())) {
 			String errorMsg = messageSource.getMessage("error.password.dismatch", null, LocaleContextHolder.getLocale());
 			model.addAttribute("errorMessage", errorMsg);
-			return "signup";    
+			return "signup";
 		}
 		
 		try {
@@ -64,10 +64,6 @@ public class UserController {
 	
 	@GetMapping("/profile")
 	public String profile(Model model) {
-		model.addAttribute("isLogged",userService.isLogged());
-		model.addAttribute("isAdmin",userService.isAdmin());
-		model.addAttribute("currentUser", userService.getCurrentUser());
-		model.addAttribute("defaultProfileUrlImage", User.DEFAULT_URL_PROFILE_PIC);
 		return "profile";
 	}
 }

@@ -39,7 +39,8 @@
 					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
 						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a>
+						</li>
 					</ul>
 				</div>
 
@@ -102,8 +103,24 @@
 							</p>
 						</div>
 
+
+
 						<form th:action="@{/confirmReviewCreation/{recipeId}(recipeId=${recipe.id})}" method="POST"
 							th:object="${review}">
+
+							<!-- Box messaggi errore validazione -->
+							<div class="alert-error" th:if="${#fields.hasAnyErrors()}">
+								<i class="fa-solid fa-circle-exclamation alert-icon"></i>
+								<div class="alert-content">
+									<h4>Errore nella compilazione</h4>
+									<ul>
+										<li th:each="err : ${#fields.allErrors()}" th:text="${err}">Errore nel form</li>
+									</ul>
+								</div>
+							</div>
+
+
+
 							<!-- Rating System (Input Radio Nascosti) -->
 							<div class="form-group">
 								<label class="label">Valutazione</label>
@@ -132,14 +149,14 @@
 							<div class="form-group">
 								<label class="label">La tua recensione</label>
 								<textarea class="admin-input admin-textarea review-textarea" th:field="*{text}"
-									placeholder="Racconta cosa ti è piaciuto o cosa miglioreresti..." maxlength="500"
-									oninput="document.getElementById('charCount').textContent = this.value.length + ' / 500'"></textarea>
-								<div class="char-counter" id="charCount">0 / 500</div>
+									placeholder="Racconta cosa ti è piaciuto o cosa miglioreresti..." maxlength="5000"
+									oninput="document.getElementById('charCount').textContent = this.value.length + ' / 5000'"></textarea>
+								<div class="char-counter" id="charCount">0 / 5000</div>
 							</div>
 
 							<!-- Bottoni -->
 							<div class="form-actions-row">
-								<a href="#" class="btn btn-outline-admin" style="height: 44px;">Annulla</a>
+								<a th:href="@{/recipe/{id}(id=${recipe.id})}" class="btn btn-outline-admin" style="height: 44px;">Annulla</a>
 								<button type="submit" class="btn btn-primary" style="height: 44px;">
 									<i class="fa-regular fa-paper-plane"></i> Pubblica Recensione
 								</button>
