@@ -29,8 +29,6 @@ public class AdminController {
 	CategoryService categoryService;
 	@Autowired
 	RecipeService recipeService;
-	@Autowired MessageSource messageSource;
-
 	@GetMapping("/admin/categoryPanel")
 	public String categoryPanel(Model model) {
 
@@ -89,8 +87,7 @@ public class AdminController {
 		}
 		if(category.getName().equals(Category.DEFAULT_CAT_NAME)) {
 			/*errore impossibile modificare la cateogria di default*/
-			String errorMsg = messageSource.getMessage("error.category.editingDefaultCategory", null, LocaleContextHolder.getLocale());
-			bindingResult.rejectValue("name", errorMsg);
+			bindingResult.rejectValue("name", "error.category.editingDefaultCategory",null);
 			return "categoryEdit";
 		}
 		if(bindingResult.hasErrors()) {

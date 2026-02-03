@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.uniroma3.siw.model.Ingredient;
 import it.uniroma3.siw.model.Recipe;
 import it.uniroma3.siw.model.Review;
-import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.service.CategoryService;
 import it.uniroma3.siw.service.RecipeService;
 import it.uniroma3.siw.service.UserService;
@@ -35,6 +36,8 @@ public class RecipeController {
 	RecipeService recipeService;
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	MessageSource messageSource;
 
 	/*
 	 * VISUALIZZAZIONE
@@ -101,13 +104,13 @@ public class RecipeController {
 	@PostMapping("/confirmNewRecipe")
 	@Transactional
 	public String confirmNewRecipe(@Valid @ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, Model model) {
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
-			//sistema verifica errore
+			model.addAttribute("categoryList", categoryService.getAllCategories());
 			return "formNewRecipe";
 		}
 
@@ -151,7 +154,7 @@ public class RecipeController {
 	@Transactional
 	public String confirmNewIngredient(@ModelAttribute("recipe") Recipe recipe, // Recupera dal form
 			@PathVariable("id") Long id, @RequestParam("ingIndex") int index, // Passiamo l'indice
-			RedirectAttributes redirectAttributes, Model model) {
+			BindingResult bindingResult, Model model) {
 
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
@@ -160,10 +163,18 @@ public class RecipeController {
 		// questo è l'oggetto con tutte le info tranne l'utlimo ingrediente
 		Recipe recipeDB = recipeService.findRecipeById(id);
 		Ingredient nuovoIng = recipe.getIngredients().get(index);
-		if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
-			recipeDB.getIngredients().add(nuovoIng);
-			recipeService.save(recipeDB); // Salva l'aggiunta
+		
+		if (nuovoIng.getName() == null || nuovoIng.getName().isBlank()) {
+			bindingResult.rejectValue("ingredients[\" + index + \"].name","NotBlank.ingredients.name", null);
 		}
+		if(bindingResult.hasErrors()) {
+	        model.addAttribute("recipe", recipeDB);
+	        model.addAttribute("ingIndex", index);
+			return "formNewIngredient";
+		}
+		
+		recipeDB.getIngredients().add(nuovoIng);
+		recipeService.save(recipeDB);
 
 		return "redirect:/formNewIngredient/" + id;
 	}
@@ -209,14 +220,16 @@ public class RecipeController {
 	@PostMapping("/confirmEditRecipe/{recipeId}")
 	@Transactional
 	public String confirmEditRecipe(@Valid @ModelAttribute("recipe") Recipe recipe,
-			@PathVariable("recipeId") Long recipeId, BindingResult bindingResult) {
+			@PathVariable("recipeId") Long recipeId, BindingResult bindingResult, Model model) {
 
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
-			return "redirect:/formEditRecipe/" + recipeId;
+			model.addAttribute("categoryList", categoryService.getAllCategories());
+			recipe.setId(recipeId);
+			return "formEditRecipe";
 		}
 
 		Recipe recipeDB = recipeService.findRecipeById(recipeId);
@@ -231,7 +244,6 @@ public class RecipeController {
 			recipeDB.setPrepTime(recipe.getPrepTime());
 			recipeDB.setUrlImage(recipe.getUrlImage());
 			recipeDB.setInstructions(recipe.getInstructions());
-
 			recipeDB.setCreationDate(LocalDate.now(ZoneId.of("GMT")));
 
 			recipeService.save(recipeDB);
@@ -288,7 +300,7 @@ public class RecipeController {
 	@PostMapping("/confirmNewIngredientEdit/{id}")
 	@Transactional
 	public String confirmNewIngredientEdit(@PathVariable("id") Long id, @RequestParam("ingIndex") int index,
-			@ModelAttribute("recipe") Recipe recipe, Model model) {
+			@Valid @ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult, Model model) {
 
 		// currentUser!= null perché auth permette solo gli autenticati
 		if (userService.getCurrentUser().getIsBanned()) {
@@ -296,23 +308,29 @@ public class RecipeController {
 		}
 		Recipe recipeDB = recipeService.findRecipeById(id);
 
-		if (recipeDB != null) {
-			if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
-				return "redirect:/recipe/" + id;
-
-			Ingredient nuovoIng = recipe.getIngredients().get(index);
-			if (nuovoIng.getName() != null && !nuovoIng.getName().isBlank()) {
-				recipeDB.getIngredients().add(nuovoIng);
-
-				// rimuovi tutti gli ingredienti vuoti prima di salvare
-				recipeDB = recipeService.removeEmptyIngredients(recipeDB);
-
-				recipeService.save(recipeDB); // Salva l'aggiunta
-				return "redirect:/editRecipeIngredients/" + id;
-			}
+		if (recipeDB == null) {
+			return "redirect:/";
 		}
+		
+		if (!(recipeDB.getAuthor().getId() == userService.getCurrentUser().getId()))
+			return "redirect:/recipe/" + id;
 
-		return "redirect:/";
+		Ingredient nuovoIng = recipe.getIngredients().get(index);
+		if (nuovoIng.getName() == null || nuovoIng.getName().isBlank()) {
+			bindingResult.rejectValue("ingredients[\" + index + \"].name","NotBlank.ingredients.name", null);
+		}
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("recipe", recipeDB);
+	        model.addAttribute("ingIndex", index);
+	        return "editRecipeIngredients";
+		}
+		
+		recipeDB.getIngredients().add(nuovoIng);
+		// rimuovi tutti gli ingredienti vuoti prima di salvare
+		recipeDB = recipeService.removeEmptyIngredients(recipeDB);
+
+		recipeService.save(recipeDB); // Salva l'aggiunta
+		return "redirect:/editRecipeIngredients/" + id;
 	}
 
 	@GetMapping("/confirmRecipeEditUltimated/{id}")
