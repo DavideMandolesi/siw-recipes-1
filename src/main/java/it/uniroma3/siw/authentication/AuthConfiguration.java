@@ -60,7 +60,7 @@ public class AuthConfiguration {
 		// chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register 
         .requestMatchers(HttpMethod.POST, "/login","/register").permitAll()
         .requestMatchers(HttpMethod.POST, "/confirmNewRecipe","/confirmNewIngredient/**","/confirmEditRecipe/**","/confirmNewIngredientEdit/**",
-        		"/confirmReviewCreation/**","/confirmReviewEdit/**").authenticated()
+        		"/confirmReviewCreation/**","/confirmReviewEdit/**","/updateProfileImage").authenticated()
         
         .requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
         .requestMatchers(HttpMethod.POST,"/admin/**").hasAnyAuthority(ADMIN_ROLE)

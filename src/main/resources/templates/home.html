@@ -38,7 +38,8 @@
 					<ul>
 						<!--Visibile SEMPRE, accessibile SOLO SE AUTENTICATO (vedi auth config)-->
 						<li><a th:href="@{/myRecipeList}"><i class="fa-solid fa-book-open"></i> Le Mie Ricette</a></li>
-						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a></li>
+						<li><a th:href="@{/myReviewList}"><i class="fa-regular fa-comment"></i> Le Mie Recensioni</a>
+						</li>
 					</ul>
 				</div>
 
@@ -87,6 +88,20 @@
 				</div>
 
 			</header>
+
+			<!-- Banner Account Sospeso (Visibile solo se isBanned è true) -->
+			<div class="alert-banner-danger" th:if="${currentUser?.isBanned}">
+				<div class="alert-icon-wrapper">
+					<i class="fa-solid fa-circle-exclamation"></i>
+				</div>
+				<div class="alert-text">
+					<h3>Account Sospeso</h3>
+					<p>Il tuo account è stato bannato dagli amministratori per violazione delle linee guida della
+						community.</p>
+					<p>Puoi continuare a navigare e consultare le ricette, ma non puoi pubblicare nuovi contenuti,
+						lasciare recensioni o interagire con altri utenti.</p>
+				</div>
+			</div>
 
 			<!-- RECIPE GRID -->
 			<section class="recipe-grid">

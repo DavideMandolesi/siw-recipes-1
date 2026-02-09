@@ -132,7 +132,7 @@ public class AdminController {
 			return "redirect:/";
 		}
 		User user = userService.getUserById(id);
-		if (user.getCredentials().getRole().equals(Credentials.DEFAULT_ROLE))
+		if (user.getCredentials().getRole().equals(Credentials.ADMIN_ROLE))
 			return "redirect:/admin/userPanel";
 		userService.banUser(user);
 		userService.save(user);
@@ -147,7 +147,7 @@ public class AdminController {
 			return "redirect:/";
 		}
 		User user = userService.getUserById(id);
-		if (user.getCredentials().getRole().equals(Credentials.DEFAULT_ROLE))
+		if (user.getCredentials().getRole().equals(Credentials.ADMIN_ROLE))
 			return "redirect:/admin/userPanel";
 		userService.unbanUser(user);
 		userService.save(user);

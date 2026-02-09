@@ -114,5 +114,14 @@ public class UserService {
 	public void unbanUser(User user) {
 		user.setIsBanned(false);
 	}
+
+	public void updateUrlImage(User currentUser, String newUrl) {
+		if(newUrl!=null && !newUrl.isBlank()) {
+			currentUser.setUrlImage(newUrl);
+		}else {
+			currentUser.setUrlImage(User.DEFAULT_URL_PROFILE_PIC);
+		}
+		save(currentUser);
+	}
 	
 }

@@ -66,4 +66,13 @@ public class UserController {
 	public String profile(Model model) {
 		return "profile";
 	}
+	
+	@PostMapping("/updateProfileImage")
+	public String updateProfileImage(@RequestParam("urlImage") String newUrl,
+			Model model) {
+		User currentUser = userService.getCurrentUser();
+		//si occupa anche di salvare l'user
+		userService.updateUrlImage(currentUser,newUrl);
+		return"redirect:/profile";
+	}
 }
