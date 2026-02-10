@@ -1,5 +1,6 @@
 package it.uniroma3.siw.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,5 +78,11 @@ public class RecipeService {
 	    if(difficulty != null && difficulty.isBlank()) {difficulty=null;}
 	    
 		return recipeRepository.findByFilters(titleParam, categoryId, difficulty);
+	}
+
+	//aggiungi .plusDays(1) per testare l'eliminazione di ricette reate oggi.
+	//così il metodo cancellerebbe  tutte le ricette "create prima di domani"
+	public void deleteInactiveRecipes() {
+		recipeRepository.deleteByIsActiveFalseAndCreationDateBefore(LocalDate.now());
 	}
 }

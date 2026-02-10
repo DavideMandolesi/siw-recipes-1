@@ -153,4 +153,14 @@ public class AdminController {
 		userService.save(user);
 		return "redirect:/admin/userPanel";
 	}
+	
+	@GetMapping("/admin/deleteInactiveRecipes")
+	public String deleteInactiveRecipes() {
+		if (userService.getCurrentUser().getIsBanned()) {
+			return "redirect:/";
+		}
+		
+		recipeService.deleteInactiveRecipes();
+		return"redirect:/";
+	}
 }
